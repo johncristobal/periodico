@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="#fff"
+    android:layout_margin="3dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:visibility="invisible"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/textViewAutor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imageView"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_marginStart="15dp"
+        android:text="Autor"
+        android:textSize="12sp"
+        android:textColor="@color/accent"
+        android:layout_marginLeft="15dp"
+        android:layout_toEndOf="@id/imageView" />
+
+    <TextView
+        android:id="@+id/textViewCategoria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:layout_marginTop="10dp"
+        android:text="Categoria"
+        android:textSize="12sp"
+        android:layout_marginBottom="5dp"
+        android:textStyle="italic"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignLeft="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/textViewTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewAutor"
+        android:layout_toRightOf="@id/imageView"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:text="Title"
+        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_toEndOf="@id/imageView"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:text="LastUpdate"
+        android:textSize="12sp"
+        android:textColor="@color/colorAccent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp" />
+</RelativeLayout>
