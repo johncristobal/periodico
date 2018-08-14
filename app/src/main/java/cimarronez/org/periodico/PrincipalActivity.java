@@ -9,9 +9,14 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import cimarronez.org.periodico.Noticias.Fragments.AvisosFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BlankFragment;
+import cimarronez.org.periodico.Noticias.Fragments.BuscarFragment;
 
-public class PrincipalActivity extends AppCompatActivity implements BlankFragment.OnFragmentInteractionListener{
+public class PrincipalActivity extends AppCompatActivity implements
+        BlankFragment.OnFragmentInteractionListener,
+        AvisosFragment.OnFragmentInteractionListener,
+        BuscarFragment.OnFragmentInteractionListenerBuscar{
 
     private TextView mTextMessage;
     private FrameLayout container;
@@ -28,10 +33,17 @@ public class PrincipalActivity extends AppCompatActivity implements BlankFragmen
                     //mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
+                    AvisosFragment avisosFragment = new AvisosFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,avisosFragment).commit();
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
+                    BuscarFragment buscar = new BuscarFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,buscar).commit();
                     //mTextMessage.setText(R.string.title_notifications);
+                    return true;
+
+                case R.id.action_settings:
                     return true;
             }
             return false;

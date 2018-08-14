@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import cimarronez.org.periodico.R;
 
+import static cimarronez.org.periodico.Noticias.Fragments.BlankFragment.categorias;
 import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
-import static cimarronez.org.periodico.Noticias.NoticiasActivity.categorias;
 
 public class DetallesActivity extends AppCompatActivity {
 

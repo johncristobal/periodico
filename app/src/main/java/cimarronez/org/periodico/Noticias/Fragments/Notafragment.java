@@ -1,10 +1,7 @@
 package cimarronez.org.periodico.Noticias.Fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,13 +26,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import cimarronez.org.periodico.Noticias.DetallesActivity;
-import cimarronez.org.periodico.Noticias.NoticiasActivity;
 import cimarronez.org.periodico.Noticias.NoticiasAdapter;
 import cimarronez.org.periodico.Noticias.NoticiasModel;
 import cimarronez.org.periodico.Noticias.RecyclerViewOnItemClickListener;
 import cimarronez.org.periodico.R;
-
-import static cimarronez.org.periodico.Noticias.NoticiasActivity.context;
 
 public class Notafragment extends Fragment {
 
@@ -49,6 +42,7 @@ public class Notafragment extends Fragment {
     public int index = 0;
 
     public static NoticiasModel modelostatisco;
+    public Context context;
 
     public Notafragment() {
         // Required empty public constructor
@@ -70,6 +64,7 @@ public class Notafragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        context = getActivity();
         index = getArguments().getInt("indice");
 
         notas = new ArrayList<>();

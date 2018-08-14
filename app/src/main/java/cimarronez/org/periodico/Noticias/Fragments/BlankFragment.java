@@ -1,8 +1,12 @@
 package cimarronez.org.periodico.Noticias.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +15,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +45,9 @@ public class BlankFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    public ViewPager viewPager;
+
+    public static List<String> categorias = new ArrayList<>();
 
 
     private OnFragmentInteractionListener mListener;
@@ -77,8 +89,8 @@ public class BlankFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        //setupViewPager(viewPager);
         // Set Tabs inside Toolbar
         TabLayout tabs = (TabLayout) view.findViewById(R.id.tab);
         tabs.setupWithViewPager(viewPager);
@@ -87,32 +99,35 @@ public class BlankFragment extends Fragment {
         return view;
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-
-        Adapter adapter = new Adapter(getChildFragmentManager());
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("indice", 0);
-        Notafragment onefragment = new Notafragment();
-        onefragment.setArguments(bundle);
-
-        adapter.addFragment(onefragment, "Hola");
-
-        /*adapter.addFragment(new TodaysFixturesFragment(), "Today");
-        adapter.addFragment(new WeekFixturesFragment(), "Week");
-        adapter.addFragment(new MonthFixturesFragment(), "Month");
-        adapter.addFragment(new AllFixturesFragment(), "Month");
-        adapter.addFragment(new MyTeamsFixturesFragment(), "My Teams");*/
-        viewPager.setAdapter(adapter);
+        firebaseCategoriasListener sync = new firebaseCategoriasListener();
+        sync.execute();
 
     }
 
-    static class Adapter extends FragmentPagerAdapter {
+    private void setupViewPager() {
+
+        ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
+        for(int i=0;i<categorias.size();i++){
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("indice", i);
+            Notafragment onefragment = new Notafragment();
+            onefragment.setArguments(bundle);
+
+            adapter.addFragment(onefragment, categorias.get(i));
+        }
+        viewPager.setAdapter(adapter);
+    }
+
+    public class ViewPagerAdapterNoticias extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public Adapter(FragmentManager manager) {
+        public ViewPagerAdapterNoticias(FragmentManager manager) {
             super(manager);
         }
 
@@ -136,7 +151,6 @@ public class BlankFragment extends Fragment {
             return mFragmentTitleList.get(position);
         }
     }
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -175,5 +189,74 @@ public class BlankFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+//=================================GEt data from firebase===========================================
+    public class firebaseCategoriasListener extends AsyncTask<Void, Void, Void> {
+        String ErrorCode = "";
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+
+        ProgressDialog progress = new ProgressDialog(getActivity());
+
+        public firebaseCategoriasListener(){
+            //mAuth = FirebaseAuth.getInstance();
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            try {
+                // Use the application default credentials
+                /*GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(credentials)
+                        .setDatabaseUrl("https://cimarronez.firebaseio.com")
+                        //.setProjectId("cimarronez")
+                        .build();
+                FirebaseApp.initializeApp(options);
+
+                db = FirestoreClient.getFirestore();*/
+                //borro local database
+                //borrarDB();
+
+                //get num elements into articulo
+
+
+                progress.setTitle("Actualizando");
+                progress.setMessage("Recuperando información...");
+                progress.setIndeterminate(true);
+                progress.setCancelable(false);
+                progress.show();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            myRef.child("categorias").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot Snapshot : dataSnapshot.getChildren()) {
+                        String key = Snapshot.getKey();
+                        String value = Snapshot.getValue().toString();
+
+                        categorias.add(value);
+                    }
+                    setupViewPager();
+                    progress.hide();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            return null;
+        }
     }
 }

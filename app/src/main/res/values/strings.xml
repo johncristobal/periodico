@@ -18,9 +18,9 @@
     <string name="textconfi">Galería</string>
     <string name="title_activity_base">BaseActivity</string>
     <string name="title_activity_principal">PrincipalActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Noticias</string>
+    <string name="title_dashboard">Avisos</string>
+    <string name="title_notifications">Buscar</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

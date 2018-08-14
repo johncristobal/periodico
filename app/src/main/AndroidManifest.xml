@@ -19,20 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Noticias.NoticiasActivity"
-            android:label="@string/title_activity_noticias"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Noticias.DetallesActivity"
             android:label="@string/title_activity_detalles"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BaseActivity"
-            android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".PrincipalActivity"
-            android:label="@string/title_activity_principal"></activity>
+            android:label="@string/title_activity_principal"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

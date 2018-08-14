@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import cimarronez.org.periodico.R;
 
-import static cimarronez.org.periodico.Noticias.NoticiasActivity.categorias;
+import static cimarronez.org.periodico.Noticias.Fragments.BlankFragment.categorias;
 
 public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
 
@@ -43,8 +43,8 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         NoticiasModel modelo = notas.get(position);
         holder.title.setText(modelo.getTitulo());
         holder.autor.setText(modelo.getAutor());
-        //holder.categoria.setText(categorias.get(modelo.getCategoria()));//String.format("%d", modelo.getCategoria()));
-        holder.categoria.setText("Categoria "+position);//String.format("%d", modelo.getCategoria()));
+        holder.categoria.setText(categorias.get(modelo.getCategoria()));//String.format("%d", modelo.getCategoria()));
+        //holder.categoria.setText("Categoria "+position);//String.format("%d", modelo.getCategoria()));
         holder.tiempo.setText(modelo.getFecha());
     }
 

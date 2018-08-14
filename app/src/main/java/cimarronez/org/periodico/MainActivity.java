@@ -16,8 +16,6 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cimarronez.org.periodico.Noticias.NoticiasActivity;
-
 public class MainActivity extends AppCompatActivity {
 
     private static final long SPLASH_SCREEN_DELAY=4000;
