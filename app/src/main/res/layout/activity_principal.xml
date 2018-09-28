@@ -5,10 +5,9 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PrincipalActivity">
+    tools:context=".BottomFragmentActivity">
 
-
-    <android.support.design.widget.BottomNavigationView
+    <!--android.support.design.widget.BottomNavigationView
         android:id="@+id/navigationFrame"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -28,6 +27,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+    </FrameLayout-->
 
 </android.support.constraint.ConstraintLayout>

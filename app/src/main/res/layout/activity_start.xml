@@ -6,10 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    tools:context=".StartActivity"
     tools:openDrawer="start">
 
-    <!--include
-        layout="@layout/app_bar_noticias"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -18,12 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true">
-
-        <include layout="@layout/nav_header_noticias" />
-
-    </android.support.design.widget.NavigationView>
-        app:headerLayout="@layout/nav_header_noticias"
-        app:menu="@menu/activity_noticias_drawer"/-->
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_start"
+        app:menu="@menu/activity_start_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

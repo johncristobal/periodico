@@ -12,11 +12,13 @@ import android.widget.TextView;
 import cimarronez.org.periodico.Noticias.Fragments.AvisosFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BlankFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BuscarFragment;
+import cimarronez.org.periodico.Noticias.Fragments.SettingsFragment;
 
-public class PrincipalActivity extends AppCompatActivity implements
+public class BottomFragmentActivity extends AppCompatActivity implements
         BlankFragment.OnFragmentInteractionListener,
         AvisosFragment.OnFragmentInteractionListener,
-        BuscarFragment.OnFragmentInteractionListenerBuscar{
+        BuscarFragment.OnFragmentInteractionListenerBuscar,
+        SettingsFragment.OnFragmentInteractionListener{
 
     private TextView mTextMessage;
     private FrameLayout container;
@@ -26,7 +28,7 @@ public class PrincipalActivity extends AppCompatActivity implements
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
+            /*switch (item.getItemId()) {
                 case R.id.navigation_home:
                     BlankFragment blannk = new BlankFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,blannk).commit();
@@ -44,8 +46,10 @@ public class PrincipalActivity extends AppCompatActivity implements
                     return true;
 
                 case R.id.action_settings:
+                    SettingsFragment setting = new SettingsFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,setting).commit();
                     return true;
-            }
+            }*/
             return false;
         }
     };
@@ -55,13 +59,13 @@ public class PrincipalActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
-        BlankFragment blannk = new BlankFragment();
+        /*BlankFragment blannk = new BlankFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,blannk).commit();
 
         //mTextMessage = (TextView) findViewById(R.id.message);
         container = findViewById(R.id.frameLayout);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationFrame);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);*/
     }
 
     @Override

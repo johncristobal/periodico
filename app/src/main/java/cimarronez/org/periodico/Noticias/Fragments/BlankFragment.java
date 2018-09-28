@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cimarronez.org.periodico.R;
+import cimarronez.org.periodico.StartActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +47,7 @@ public class BlankFragment extends Fragment {
     private String mParam2;
 
     public ViewPager viewPager;
+    public TabLayout tabs;
 
     public static List<String> categorias = new ArrayList<>();
 
@@ -89,12 +91,6 @@ public class BlankFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        //setupViewPager(viewPager);
-        // Set Tabs inside Toolbar
-        TabLayout tabs = (TabLayout) view.findViewById(R.id.tab);
-        tabs.setupWithViewPager(viewPager);
-
 
         return view;
     }
@@ -103,14 +99,26 @@ public class BlankFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        //setupViewPager(viewPager);
+        // Set Tabs inside Toolbar
+        tabs = (TabLayout) view.findViewById(R.id.tab_layout);
+
         firebaseCategoriasListener sync = new firebaseCategoriasListener();
         sync.execute();
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        StartActivity activity = (StartActivity) getActivity();
+        activity.updateView("");
     }
 
     private void setupViewPager() {
-
-        ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
+        //ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
+        ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getActivity().getSupportFragmentManager());
         for(int i=0;i<categorias.size();i++){
 
             Bundle bundle = new Bundle();
@@ -120,7 +128,11 @@ public class BlankFragment extends Fragment {
 
             adapter.addFragment(onefragment, categorias.get(i));
         }
+
         viewPager.setAdapter(adapter);
+
+        tabs.setupWithViewPager(viewPager);
+        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
     public class ViewPagerAdapterNoticias extends FragmentPagerAdapter {
@@ -149,13 +161,6 @@ public class BlankFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
-        }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
         }
     }
 

@@ -23,9 +23,18 @@
             android:label="@string/title_activity_detalles"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PrincipalActivity"
+            android:name=".BottomFragmentActivity"
             android:label="@string/title_activity_principal"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".usuario.LoginActivity" />
+        <activity
+            android:name=".InicioActivity"
+            android:label="@string/title_activity_inicio"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".StartActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

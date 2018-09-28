@@ -57,7 +57,25 @@ public class Notafragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_one, container, false);
+        return inflater.inflate(R.layout.content_inicio, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Bundle arguments = getArguments();
+        if (arguments != null)
+            updateView(getArguments().getInt("indice"));
+        else if (index != 0)
+            updateView(index);
+    }
+
+    private void updateView(int title) {
+
+        //this.textTab.setText(title);
+        firebaseListener firebase = new firebaseListener();
+        firebase.execute();
     }
 
     @Override
@@ -87,8 +105,6 @@ public class Notafragment extends Fragment {
         });
         lista.setAdapter(adapter);
 
-        firebaseListener firebase = new firebaseListener();
-        firebase.execute();
     }
 
 //=================================GEt data from firebase===========================================
@@ -122,12 +138,11 @@ public class Notafragment extends Fragment {
 
                 //get num elements into articulo
 
-
-            /*progress.setTitle("Actualizando");
-            progress.setMessage("Recuperando información...");
-            progress.setIndeterminate(true);
-            progress.setCancelable(false);
-            progress.show();*/
+                /*progress.setTitle("Actualizando");
+                progress.setMessage("Recuperando información...");
+                progress.setIndeterminate(true);
+                progress.setCancelable(false);
+                progress.show();*/
 
                 progress = getActivity().findViewById(R.id.progressBar);
                 progress.setVisibility(View.VISIBLE);
