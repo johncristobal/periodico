@@ -27,15 +27,15 @@ public class MainActivity extends AppCompatActivity {
     private ScaleGestureDetector mScaleGestureDetector;
     private float mScaleFactor = 1.0f;
     private ImageView mImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        mImageView=(ImageView)findViewById(R.id.imageView5);
-        mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
-        /*TimerTask task=new TimerTask() {
+        //mImageView=(ImageView)findViewById(R.id.imageView5);
+        //mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
+        TimerTask task=new TimerTask() {
             @Override
             public void run() {
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         Timer timer= new Timer();
-        timer.schedule(task,SPLASH_SCREEN_DELAY);*/
+        timer.schedule(task,SPLASH_SCREEN_DELAY);
     }
 
     @Override

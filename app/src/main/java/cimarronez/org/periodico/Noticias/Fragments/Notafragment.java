@@ -67,7 +67,7 @@ public class Notafragment extends Fragment {
         Bundle arguments = getArguments();
         if (arguments != null)
             updateView(getArguments().getInt("indice"));
-        else if (index != 0)
+        else if (index != -1)
             updateView(index);
     }
 
@@ -98,13 +98,18 @@ public class Notafragment extends Fragment {
         adapter = new NoticiasAdapter(context, notas, new RecyclerViewOnItemClickListener() {
             @Override
             public void onClick(View v, int position) {
+                //validar si tiene imagen solamente o si tiene tmb texto
                 Intent i = new Intent(context,DetallesActivity.class);
                 modelostatisco = notas.get(position);
                 startActivity(i);
             }
         });
         lista.setAdapter(adapter);
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
 //=================================GEt data from firebase===========================================
@@ -235,5 +240,4 @@ public class Notafragment extends Fragment {
             return null;
         }
     }
-
 }

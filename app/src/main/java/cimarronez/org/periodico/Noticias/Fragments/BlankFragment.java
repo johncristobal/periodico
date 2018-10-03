@@ -51,7 +51,6 @@ public class BlankFragment extends Fragment {
 
     public static List<String> categorias = new ArrayList<>();
 
-
     private OnFragmentInteractionListener mListener;
 
     public BlankFragment() {
@@ -118,7 +117,7 @@ public class BlankFragment extends Fragment {
 
     private void setupViewPager() {
         //ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
-        ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getActivity().getSupportFragmentManager());
+        ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
         for(int i=0;i<categorias.size();i++){
 
             Bundle bundle = new Bundle();
@@ -133,35 +132,6 @@ public class BlankFragment extends Fragment {
 
         tabs.setupWithViewPager(viewPager);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-    }
-
-    public class ViewPagerAdapterNoticias extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapterNoticias(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
     }
 
     @Override
@@ -228,7 +198,6 @@ public class BlankFragment extends Fragment {
 
                 //get num elements into articulo
 
-
                 progress.setTitle("Actualizando");
                 progress.setMessage("Recuperando información...");
                 progress.setIndeterminate(true);
@@ -245,6 +214,7 @@ public class BlankFragment extends Fragment {
             myRef.child("categorias").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    categorias.clear();
                     for (DataSnapshot Snapshot : dataSnapshot.getChildren()) {
                         String key = Snapshot.getKey();
                         String value = Snapshot.getValue().toString();
@@ -264,4 +234,35 @@ public class BlankFragment extends Fragment {
             return null;
         }
     }
+
+//===============================Fragment   adapter=================================================
+    public class ViewPagerAdapterNoticias extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapterNoticias(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
 }
