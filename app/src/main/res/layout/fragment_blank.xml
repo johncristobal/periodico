@@ -28,7 +28,7 @@
                 android:layout_height="250dp"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                app:srcCompat="@drawable/morelos" />
+                app:srcCompat="@drawable/morelosback" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

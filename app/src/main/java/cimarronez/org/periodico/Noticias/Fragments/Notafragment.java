@@ -30,6 +30,7 @@ import cimarronez.org.periodico.Noticias.NoticiasAdapter;
 import cimarronez.org.periodico.Noticias.NoticiasModel;
 import cimarronez.org.periodico.Noticias.RecyclerViewOnItemClickListener;
 import cimarronez.org.periodico.R;
+import cimarronez.org.periodico.ShowImageActivity;
 
 public class Notafragment extends Fragment {
 
@@ -99,9 +100,17 @@ public class Notafragment extends Fragment {
             @Override
             public void onClick(View v, int position) {
                 //validar si tiene imagen solamente o si tiene tmb texto
-                Intent i = new Intent(context,DetallesActivity.class);
-                modelostatisco = notas.get(position);
-                startActivity(i);
+
+                if(notas.get(position).getDescripcion().equals("")){
+                    Intent ii = new Intent(context, ShowImageActivity.class);
+                    ii.putExtra("id",notas.get(position).getId());
+                    startActivity(ii);
+                }
+                else {
+                    Intent i = new Intent(context, DetallesActivity.class);
+                    modelostatisco = notas.get(position);
+                    startActivity(i);
+                }
             }
         });
         lista.setAdapter(adapter);
@@ -175,6 +184,7 @@ public class Notafragment extends Fragment {
             temp.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    notas.clear();
                     for (DataSnapshot Snapshot : dataSnapshot.getChildren()) {
                         try {
                             NoticiasModel post = Snapshot.getValue(NoticiasModel.class);
@@ -182,7 +192,7 @@ public class Notafragment extends Fragment {
                             notas.add(post);
 
                             //lista.scrollToPosition(notas.size() - 1);
-                            adapter.notifyItemInserted(notas.size() - 1);
+                            //adapter.notifyItemInserted(notas.size());
 
                         } catch (Exception e) {
                             e.printStackTrace();

@@ -10,7 +10,7 @@ import java.util.Date;
 @IgnoreExtraProperties
 public class NoticiasModel {
 
-    public int id;
+    public String id;
     public int estatus;
     public String titulo;
     public String descripcion;
@@ -23,7 +23,7 @@ public class NoticiasModel {
 
     }
 
-    public NoticiasModel(int id, int estatus, String titulo, String descripcion, int categoria, String autor, String imagen, String fecha) {
+    public NoticiasModel(String id, int estatus, String titulo, String descripcion, int categoria, String autor, String imagen, String fecha) {
         this.id = id;
         this.estatus = estatus;
         this.titulo = titulo;
@@ -42,11 +42,11 @@ public class NoticiasModel {
         this.estatus = estatus;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

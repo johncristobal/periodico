@@ -65,7 +65,7 @@ public class DetallesActivity extends AppCompatActivity {
             foto.setVisibility(View.GONE);
         }else{
             //recuperas imagen y show
-            final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child("-LNqqaVyttWTrVwJwwQf/foto0.jpg");
+            final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(modelostatisco.getId()+"/foto0.jpg");
 
             storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -73,10 +73,9 @@ public class DetallesActivity extends AppCompatActivity {
                     // Got the download URL for 'users/me/profile.png'
                     Glide.with(DetallesActivity.this)
                             .load(uri.toString())
-                            .apply(new RequestOptions().override(240, 300).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                            .apply(new RequestOptions().override(240, 300).centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
                             //.load(storageRef)
                             .into(foto);
-
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -89,6 +88,7 @@ public class DetallesActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent ii = new Intent(DetallesActivity.this, ShowImageActivity.class);
+                    ii.putExtra("id",modelostatisco.getId());
                     startActivity(ii);
                     //Toast.makeText(DetallesActivity.this,"Abrir imagen",Toast.LENGTH_SHORT).show();
                 }

@@ -21,6 +21,7 @@
         <activity
             android:name=".Noticias.DetallesActivity"
             android:label="@string/title_activity_detalles"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BottomFragmentActivity"
@@ -33,6 +34,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".StartActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ShowImageActivity"

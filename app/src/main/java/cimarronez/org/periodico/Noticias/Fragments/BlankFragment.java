@@ -113,7 +113,7 @@ public class BlankFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         StartActivity activity = (StartActivity) getActivity();
-        activity.updateView("");
+        activity.updateView("Noticias");
     }
 
     private void setupViewPager() {
