@@ -24,17 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private static final long SPLASH_SCREEN_DELAY=4000;
     public static FirebaseAuth mAuth;
     public static FirebaseUser user;
-    private ScaleGestureDetector mScaleGestureDetector;
-    private float mScaleFactor = 1.0f;
-    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //mImageView=(ImageView)findViewById(R.id.imageView5);
-        //mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
         TimerTask task=new TimerTask() {
             @Override
             public void run() {
@@ -61,23 +56,6 @@ public class MainActivity extends AppCompatActivity {
         };
         Timer timer= new Timer();
         timer.schedule(task,SPLASH_SCREEN_DELAY);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        mScaleGestureDetector.onTouchEvent(motionEvent);
-        return true;
-    }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector scaleGestureDetector){
-            mScaleFactor *= scaleGestureDetector.getScaleFactor();
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 10.0f));
-            mImageView.setScaleX(mScaleFactor);
-            mImageView.setScaleY(mScaleFactor);
-            return true;
-        }
     }
 
     public void updateUI(FirebaseUser u)

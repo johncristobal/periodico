@@ -14,10 +14,11 @@
         android:layout_margin="20dp"
         android:layout_marginBottom="203dp"
         android:padding="50dp"
+        android:textSize="50px"
+        android:textColor="#fff"
         android:text="Nuevo Correo Americano del Sur"
         android:textAlignment="center"
-        android:textColor="#fff"
-        android:textSize="24sp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -33,10 +34,12 @@
         android:layout_marginRight="15dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="16dp"
+        android:adjustViewBounds="false"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/ic_launcher_foreground" />
 
 </android.support.constraint.ConstraintLayout>

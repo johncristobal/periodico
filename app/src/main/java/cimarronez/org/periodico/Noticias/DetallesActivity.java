@@ -1,5 +1,6 @@
 package cimarronez.org.periodico.Noticias;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import cimarronez.org.periodico.R;
+import cimarronez.org.periodico.ShowImageActivity;
 
 import static cimarronez.org.periodico.Noticias.Fragments.BlankFragment.categorias;
 import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
@@ -86,7 +88,9 @@ public class DetallesActivity extends AppCompatActivity {
             foto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(DetallesActivity.this,"Abrir imagen",Toast.LENGTH_SHORT).show();
+                    Intent ii = new Intent(DetallesActivity.this, ShowImageActivity.class);
+                    startActivity(ii);
+                    //Toast.makeText(DetallesActivity.this,"Abrir imagen",Toast.LENGTH_SHORT).show();
                 }
             });
         }

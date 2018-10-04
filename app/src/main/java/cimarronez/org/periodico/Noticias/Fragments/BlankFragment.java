@@ -103,6 +103,7 @@ public class BlankFragment extends Fragment {
         // Set Tabs inside Toolbar
         tabs = (TabLayout) view.findViewById(R.id.tab_layout);
 
+        //get categorias...
         firebaseCategoriasListener sync = new firebaseCategoriasListener();
         sync.execute();
     }
@@ -118,7 +119,8 @@ public class BlankFragment extends Fragment {
     private void setupViewPager() {
         //ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
         ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
-        for(int i=0;i<categorias.size();i++){
+        //for(int i=0;i<categorias.size();i++){
+        for(int i=0;i<1;i++){
 
             Bundle bundle = new Bundle();
             bundle.putInt("indice", i);
@@ -132,6 +134,7 @@ public class BlankFragment extends Fragment {
 
         tabs.setupWithViewPager(viewPager);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabs.setVisibility(View.GONE);
     }
 
     @Override
