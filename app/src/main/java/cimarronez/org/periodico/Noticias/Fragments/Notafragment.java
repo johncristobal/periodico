@@ -24,6 +24,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import cimarronez.org.periodico.Noticias.DetallesActivity;
 import cimarronez.org.periodico.Noticias.NoticiasAdapter;
@@ -198,6 +200,7 @@ public class Notafragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
+                    Collections.reverse(notas);
                     progress.setVisibility(View.GONE);
                 }
 

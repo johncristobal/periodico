@@ -7,9 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.StartActivity;
@@ -80,7 +82,56 @@ public class AvisosFragment extends Fragment {
 
         //recycler view con dos columnas...
         //adapter => imagen y texto abajo...al dar clic abrir imagen para poder verla tamaño completo
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.listanoticias);
+        //mRecyclerView = (RecyclerView) view.findViewById(R.id.listanoticias);
+
+        TextView content = view.findViewById(R.id.textViewContent);
+        content.setText(Html.fromHtml("<p>\n" +
+                "En tierras donde las palabras se mezclan en el aire turbio, donde las ideas y los trabajos caminan en mares turbulentos, tierras de aguas originarias y \n" +
+                "contemporáneas, pantanos para navegar y escarpadas zonas de conflicto, tierras de tragedias pero también de luchas dignas, montañas que se labran y remueven con paciencia.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "En tiempos donde la información fluye y confluye a ritmos vertiginosos, donde es necesario recuperar la letra y la estrategia, la voz, el sentido, el pensamiento entre naciones\n" +
+                " que no terminan de acomodarse, sembrarse, florecer.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "En cuerpos que enfrentan crisis políticas y cotidianas luchas, en permanente voluntad, en pasos que sencillos van sembrando, cosechando, transformando nuestros mundos, \n" +
+                "conjuntando esfuerzos y mirando horizontes comunes, es necesario un espacio-red de enlace y posición política de izquierda, de abajo, de movimientos y territorios, \n" +
+                "de sectores y clases, de dignidad.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "En pensamientos y movimientos necesitamos un medio de enlace y comunicación con sentido que recupere las historias, una herramienta para muchos de los colectivos, \n" +
+                "organizaciones, grupos, movimientos y pueblos con procesos de rebeldía y resistencia frente a las ofensivas del sistema capitalista, así, resulta fundamental contar\n" +
+                " con un espacio de información, correspondencia, opinión, enlace, registro y comunicación de propuestas, denuncias, publicaciones,… que se necesiten comunicar a otros y otras.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "Entonces es posible abrir un canal de información y propuestas, autónomo, libre, participativo, que va desde la publicación de artículos, links, páginas, libros, revistas, \n" +
+                "videos, documentales, audios, fotografía,… que se retroalimenta, se despliega y esparce, se unifica.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "Este flujo de información, de conocimientos, denuncias y reflexiones, de ida y vuelta, de vuelta y retorno, de camino sinuoso, de embarque y galope, de viento y fogata, \n" +
+                "de bits, papel, sonido,  imagen, texto, cuerpos, tierras, luchas con dignidad, sólo un espacio más de los múltiples tambores, caracoles, páginas, humos y banderas de las \n" +
+                "historias, que intenta establecer redes para el acceso a la información entre pueblos, entre organizaciones, entre movimientos,…\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "Una aplicación, un canal, para el que retomamos el nombre del correo americano del sur, intentando recuperar la memoria de aquella publicación creada por José María Morelos \n" +
+                "al tomar con las fuerzas insurgentes la ciudad de Oaxaca en 1813, creada con el objetivo de dar a conocer las causas, el pensamiento, la posición política y los informes de \n" +
+                "las campañas que se libraban en distintos territorios por la libertad de los pueblos de las Américas durante la guerra de revolución de independencia, durante casi 30 ediciones.\n" +
+                "</p>\n" +
+                "<p> \n" +
+                "Se cuenta con las secciones: <br>\n" +
+                "•\tEditorial<br>\n" +
+                "•\tEnlaces<br>\n" +
+                "•\tNoticias<br>\n" +
+                "•\tForo abierto “el correo del correo”<br>\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "Los temas son libres y abiertos, sujetos en su publicación a la aprobación del comité editorial.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "Los temas van de la promoción de la salud a la energía autónoma y comunitaria, de la defensa a la creación de territorios, de los reportes de urgencia a los artículos \n" +
+                "que se aporten, de publicación de saberes y conocimientos al uso de lenguas originarias, de la publicación de materiales pedagógicos al baúl de talleres temáticos, de \n" +
+                "la defensa de la tierra, la educación pública y gratuita, la invitación a eventos o las denuncias y noticias, entre muchos otros…\n" +
+                "</p>"));
     }
 
     @Override
@@ -88,7 +139,7 @@ public class AvisosFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         StartActivity activity = (StartActivity) getActivity();
-        activity.updateView("");
+        activity.updateView("Editorial");
     }
 
     // TODO: Rename method, update argument and hook method into UI event
