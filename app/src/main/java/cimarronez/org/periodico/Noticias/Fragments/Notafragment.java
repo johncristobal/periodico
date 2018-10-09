@@ -96,7 +96,7 @@ public class Notafragment extends Fragment {
         lista.setLayoutManager(linearLayoutManager);
         lista.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new NoticiasAdapter(context, notas, new RecyclerViewOnItemClickListener() {
+        adapter = new NoticiasAdapter(context, notas);/*, new RecyclerViewOnItemClickListener() {
             @Override
             public void onClick(View v, int position) {
                 //validar si tiene imagen solamente o si tiene tmb texto
@@ -112,7 +112,7 @@ public class Notafragment extends Fragment {
                     startActivity(i);
                 }
             }
-        });
+        });*/
         lista.setAdapter(adapter);
     }
 

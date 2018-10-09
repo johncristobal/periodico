@@ -62,12 +62,67 @@
         android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView"
         android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/imageView"
         android:layout_marginEnd="15dp"
         android:text="LastUpdate"
-        android:textSize="12sp"
         android:textColor="@color/colorAccent"
+        android:textSize="12sp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp" />
+
+    <LinearLayout
+        android:id="@+id/likelayout"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/textViewCategoria"
+        android:layout_toStartOf="@+id/commentlayout"
+        android:orientation="horizontal"
+        android:layout_toLeftOf="@+id/commentlayout">
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="-10dp"
+            app:srcCompat="@drawable/like" />
+
+        <TextView
+            android:id="@+id/textViewLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Texto" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/commentlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/textViewCategoria"
+        android:layout_alignEnd="@+id/textViewTime"
+        android:orientation="horizontal"
+        android:layout_alignRight="@+id/textViewTime">
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="-10dp"
+            app:srcCompat="@drawable/ic_chat_bubble_outline" />
+
+        <TextView
+            android:id="@+id/textViewComentarios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="likes" />
+    </LinearLayout>
+
 </RelativeLayout>

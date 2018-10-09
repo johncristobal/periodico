@@ -18,12 +18,13 @@ public class NoticiasModel {
     public String autor;
     public String imagen;
     public String fecha;
+    public int likes;
 
     public NoticiasModel(){
 
     }
 
-    public NoticiasModel(String id, int estatus, String titulo, String descripcion, int categoria, String autor, String imagen, String fecha) {
+    public NoticiasModel(String id, int estatus, String titulo, String descripcion, int categoria, String autor, String imagen, String fecha, int likes) {
         this.id = id;
         this.estatus = estatus;
         this.titulo = titulo;
@@ -32,6 +33,7 @@ public class NoticiasModel {
         this.autor = autor;
         this.imagen = imagen;
         this.fecha = fecha;
+        this.likes = likes;
     }
 
     public int getEstatus() {
@@ -96,5 +98,13 @@ public class NoticiasModel {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 }
