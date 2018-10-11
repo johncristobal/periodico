@@ -27,7 +27,9 @@
             android:name=".BottomFragmentActivity"
             android:label="@string/title_activity_principal"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".usuario.LoginActivity" />
+        <activity
+            android:name=".usuario.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".InicioActivity"
             android:label="@string/title_activity_inicio"
@@ -42,7 +44,7 @@
         <activity
             android:name=".Noticias.ComentariosActivity"
             android:label="@string/title_activity_comentarios"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -1,7 +1,10 @@
 package cimarronez.org.periodico.Noticias;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +32,7 @@ import java.util.Map;
 
 import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.ShowImageActivity;
+import cimarronez.org.periodico.usuario.LoginActivity;
 
 import static cimarronez.org.periodico.Noticias.Fragments.BlankFragment.categorias;
 import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
@@ -40,6 +44,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
     public Context context;
     public ArrayList<NoticiasModel> notas;
+    public String sesion;
     //private final RecyclerViewOnItemClickListener listener;
 
     public NoticiasAdapter(Context c, ArrayList<NoticiasModel> notas){
@@ -133,27 +138,30 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             public void onClick(View view) {
                 //estyo es mas facil
                 //Toast.makeText(context,"Like "+position,Toast.LENGTH_SHORT).show();
+                sesion = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getString("sesion","null");
+                if(sesion.equals("1")){
+                    int likes = notas.get(position).getLikes();
 
-                int likes = notas.get(position).getLikes();
+                    if(notas.get(position).isSetLike()) {
+                        notas.get(position).setSetLike(false);
+                        //manita blanca
+                        holder.likeImage.setImageResource(R.drawable.like);
+                        likes--;
+                    }else{
+                        notas.get(position).setSetLike(true);
+                        holder.likeImage.setImageResource(R.drawable.likeplus);
+                        //manita negra
+                        likes++;
+                    }
 
-                if(notas.get(position).isSetLike()) {
-                    notas.get(position).setSetLike(false);
-                    //manita blanca
-                    holder.likeImage.setImageResource(R.drawable.like);
-                    likes--;
+                    //update firebase child, set lieks = likes
+                    notas.get(position).setLikes(likes);
+                    myRef.child("noticias").child(notas.get(position).getId()).updateChildren(notas.get(position).toMap());
+
+                    holder.textlikes.setText(String.format("%d", notas.get(position).getLikes()));
                 }else{
-                    notas.get(position).setSetLike(true);
-                    holder.likeImage.setImageResource(R.drawable.likeplus);
-                    //manita negra
-                    likes++;
+                    iniciarSesion();
                 }
-
-                //update firebase child, set lieks = likes
-                notas.get(position).setLikes(likes);
-                myRef.child("noticias").child(notas.get(position).getId()).updateChildren(notas.get(position).toMap());
-
-                holder.textlikes.setText(String.format("%d", notas.get(position).getLikes()));
-
             }
         });
 
@@ -165,20 +173,15 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                 //abrir visra con comentarios...
                 //ir por lista de comentarios y visualizarlos
                 //la vista debe tener el recycler y un lugar para agregar comenario
+                sesion = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getString("sesion","null");
+                if(sesion.equals("1")){
+                    Intent ii = new Intent(context,ComentariosActivity.class);
+                    ii.putExtra("id", notas.get(position).getId());
+                    context.startActivity(ii);
+                }else{
+                    iniciarSesion();
+                }
 
-                Intent ii = new Intent(context,ComentariosActivity.class);
-                ii.putExtra("id", notas.get(position).getId());
-                context.startActivity(ii);
-
-                /*String idNota = notas.get(position).getId();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference();
-
-                String keyArticle = myRef.child("comentarios").child(idNota).push().getKey();
-                ComentariosModel article = new ComentariosModel(keyArticle,idNota,1,"Alex","jajajaj","fecha");
-
-                Map<String, Object> postValuesArticle = article.toMap();
-                myRef.child("comentarios").child(idNota).child(keyArticle).updateChildren(postValuesArticle);*/
             }
         });
     }
@@ -188,6 +191,28 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         return notas.size();
     }
 
+    public void iniciarSesion(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Atenciòn");
+        builder.setMessage("Para continuar debes iniciar sesiòn...");
+        builder.setPositiveButton("Iniciar sesiòn", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent act = new Intent(context, LoginActivity.class);
+                context.startActivity(act);
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
+        dialog.show();
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {//implements View.OnClickListener{
         public TextView title, categoria,autor,tiempo,textlikes,textcomentarios;

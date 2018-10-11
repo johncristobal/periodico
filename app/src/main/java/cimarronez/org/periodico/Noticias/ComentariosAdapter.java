@@ -37,8 +37,8 @@ public class ComentariosAdapter extends RecyclerView.Adapter<ComentariosAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.title.setText("cometario");
-        holder.fecha.setText("Fecha");
+        holder.title.setText(notas.get(position).getComentario());
+        holder.fecha.setText(notas.get(position).getFecha());
         //holder.thumbnail
     }
 

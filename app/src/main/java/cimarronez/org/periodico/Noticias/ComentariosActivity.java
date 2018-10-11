@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -26,18 +27,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
 
 import cimarronez.org.periodico.R;
 
 public class ComentariosActivity extends AppCompatActivity {
 
-    public String id;
+    public String idNota;
     public ArrayList<ComentariosModel> comentariosList;
 
     public RecyclerView lista;
     public ComentariosAdapter adapter;
+
+    public EditText comentario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,7 @@ public class ComentariosActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Comentarios");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -56,11 +63,11 @@ public class ComentariosActivity extends AppCompatActivity {
             }
         });*/
 
-        id = getIntent().getStringExtra("id");
+        idNota = getIntent().getStringExtra("id");
         comentariosList = new ArrayList<>();
         lista = findViewById(R.id.listaComentarios);
 
-        EditText comentario = (EditText) findViewById(R.id.editTextAdd);
+        comentario = (EditText) findViewById(R.id.editTextAdd);
         comentario.requestFocus();
 
         //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -72,6 +79,37 @@ public class ComentariosActivity extends AppCompatActivity {
 
     public void sendComentario(View view) {
 
+        if(!comentario.getText().toString().equals("")) {
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference();
+
+            String keyArticle = myRef.child("comentarios").child(idNota).push().getKey();
+
+            Date myDate = new Date();
+            SimpleDateFormat dmyFormat = new SimpleDateFormat("dd-MM-yyyy");
+            String fecha = dmyFormat.format(myDate);
+
+            ComentariosModel article = new ComentariosModel(keyArticle, 1, "Alex", comentario.getText().toString(), fecha);
+
+            Map<String, Object> postValuesArticle = article.toMap();
+            myRef.child("comentarios").child(idNota).child(keyArticle).updateChildren(postValuesArticle);
+
+            //mandamos comentasrio, ahora actualizamos lista...
+            comentariosList.add(article);
+
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 //=================================GEt data from firebase===========================================
@@ -84,6 +122,7 @@ public class ComentariosActivity extends AppCompatActivity {
 
         public firebaseListener(){
             //mAuth = FirebaseAuth.getInstance();
+
         }
 
         @Override
@@ -129,7 +168,7 @@ public class ComentariosActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
 
             Query temp = null;
-            temp = myRef.child("comentarios").child(id);//.orderByChild("categoria").equalTo(index);
+            temp = myRef.child("comentarios").child(idNota);//.orderByChild("categoria").equalTo(index);
 
             //this is for show items...
             temp.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -159,46 +198,6 @@ public class ComentariosActivity extends AppCompatActivity {
                 }
             });
 
-            /*temp.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    if (dataSnapshot != null && dataSnapshot.getValue() != null) {
-                        try {
-                            NoticiasModel post = dataSnapshot.getValue(NoticiasModel.class);
-                            Log.e("TAG", post.autor);
-                            notas.add(post);
-
-                            //lista.scrollToPosition(notas.size() - 1);
-                            adapter.notifyItemInserted(notas.size() - 1);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });*/
-
             return null;
         }
 
@@ -208,7 +207,6 @@ public class ComentariosActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ComentariosActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false);
-
 
         lista.setLayoutManager(linearLayoutManager);
         lista.setItemAnimator(new DefaultItemAnimator());
@@ -232,6 +230,5 @@ public class ComentariosActivity extends AppCompatActivity {
         });*/
         lista.setAdapter(adapter);
     }
-
 }
 }

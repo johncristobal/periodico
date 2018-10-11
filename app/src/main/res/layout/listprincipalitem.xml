@@ -113,7 +113,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
             android:layout_marginBottom="-10dp"
-            app:srcCompat="@drawable/ic_chat_bubble_outline"
+            app:srcCompat="@drawable/ic_chat_bubble"
             android:layout_marginStart="5dp" />
 
         <TextView
