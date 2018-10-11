@@ -9,7 +9,6 @@ import java.util.Map;
 public class ComentariosModel {
 
     public String id;
-    public String idNoticia;
     public int estatus;
     public String idUsuario;
     public String comentario;
@@ -19,21 +18,12 @@ public class ComentariosModel {
 
     }
 
-    public ComentariosModel(String id, String idNoticia,int estatus, String idUsuario, String comentario, String fecha) {
+    public ComentariosModel(String id,int estatus, String idUsuario, String comentario, String fecha) {
         this.id = id;
-        this.idNoticia = idNoticia;
         this.estatus = estatus;
         this.idUsuario = idUsuario;
         this.comentario = comentario;
         this.fecha = fecha;
-    }
-
-    public String getIdNoticia() {
-        return idNoticia;
-    }
-
-    public void setIdNoticia(String idNoticia) {
-        this.idNoticia = idNoticia;
     }
 
     public String getId() {

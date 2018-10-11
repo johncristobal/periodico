@@ -160,13 +160,14 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         holder.comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,"comment "+position,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,"comment "+position,Toast.LENGTH_SHORT).show();
                 //AGREGAMOS comentario....ahora a afinar la logica...
                 //abrir visra con comentarios...
                 //ir por lista de comentarios y visualizarlos
                 //la vista debe tener el recycler y un lugar para agregar comenario
 
                 Intent ii = new Intent(context,ComentariosActivity.class);
+                ii.putExtra("id", notas.get(position).getId());
                 context.startActivity(ii);
 
                 /*String idNota = notas.get(position).getId();
