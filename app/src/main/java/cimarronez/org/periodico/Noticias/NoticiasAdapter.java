@@ -35,6 +35,8 @@ import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelosta
 
 public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference();
 
     public Context context;
     public ArrayList<NoticiasModel> notas;
@@ -125,11 +127,33 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             }
         });
 
+        holder.textlikes.setText(String.format("%d", notas.get(position).getLikes()));
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //estyo es mas facil
-                Toast.makeText(context,"Like "+position,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,"Like "+position,Toast.LENGTH_SHORT).show();
+
+                int likes = notas.get(position).getLikes();
+
+                if(notas.get(position).isSetLike()) {
+                    notas.get(position).setSetLike(false);
+                    //manita blanca
+                    holder.likeImage.setImageResource(R.drawable.like);
+                    likes--;
+                }else{
+                    notas.get(position).setSetLike(true);
+                    holder.likeImage.setImageResource(R.drawable.likeplus);
+                    //manita negra
+                    likes++;
+                }
+
+                //update firebase child, set lieks = likes
+                notas.get(position).setLikes(likes);
+                myRef.child("noticias").child(notas.get(position).getId()).updateChildren(notas.get(position).toMap());
+
+                holder.textlikes.setText(String.format("%d", notas.get(position).getLikes()));
+
             }
         });
 
@@ -138,7 +162,14 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             public void onClick(View view) {
                 Toast.makeText(context,"comment "+position,Toast.LENGTH_SHORT).show();
                 //AGREGAMOS comentario....ahora a afinar la logica...
-                String idNota = notas.get(position).getId();
+                //abrir visra con comentarios...
+                //ir por lista de comentarios y visualizarlos
+                //la vista debe tener el recycler y un lugar para agregar comenario
+
+                Intent ii = new Intent(context,ComentariosActivity.class);
+                context.startActivity(ii);
+
+                /*String idNota = notas.get(position).getId();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference();
 
@@ -146,8 +177,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                 ComentariosModel article = new ComentariosModel(keyArticle,idNota,1,"Alex","jajajaj","fecha");
 
                 Map<String, Object> postValuesArticle = article.toMap();
-                myRef.child("comentarios").child(idNota).child(keyArticle).updateChildren(postValuesArticle);
-
+                myRef.child("comentarios").child(idNota).child(keyArticle).updateChildren(postValuesArticle);*/
             }
         });
     }
@@ -159,8 +189,8 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {//implements View.OnClickListener{
-        public TextView title, categoria,autor,tiempo;
-        public ImageView thumbnail;
+        public TextView title, categoria,autor,tiempo,textlikes,textcomentarios;
+        public ImageView thumbnail,likeImage;
         public LinearLayout like,comment;
 
         public MyViewHolder(View view) {
@@ -170,8 +200,11 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             this.autor = (TextView) view.findViewById(R.id.textViewAutor);
             this.tiempo = (TextView) view.findViewById(R.id.textViewTime);
             this.thumbnail = (ImageView) view.findViewById(R.id.imageView);
+            this.likeImage = (ImageView) view.findViewById(R.id.imageViewLike);
             this.like = (LinearLayout) view.findViewById(R.id.likelayout);
             this.comment = (LinearLayout) view.findViewById(R.id.commentlayout);
+            this.textlikes =  view.findViewById(R.id.textViewLikes);
+            this.textcomentarios = view.findViewById(R.id.textViewComentarios);
             //view.setOnClickListener(this);
         }
 

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -183,6 +184,45 @@ public class Notafragment extends Fragment {
                  temp = myRef.child("noticias").orderByChild("categoria").equalTo(index);
             }
 
+            temp.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    /*NoticiasModel post = dataSnapshot.getValue(NoticiasModel.class);
+                    Log.i("Update","id_"+post.getAutor());
+
+                    for (int i=0;i<notas.size();i++){
+                        if(notas.get(i).getId().equals(post.getId())){
+                            notas.remove(i);
+                            notas.add(i,post);
+                            break;
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();*/
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    //update notas and update list
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            //this is for show items...
             temp.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -6,6 +6,8 @@ import android.view.View;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class NoticiasModel {
@@ -19,6 +21,7 @@ public class NoticiasModel {
     public String imagen;
     public String fecha;
     public int likes;
+    public boolean setLike;
 
     public NoticiasModel(){
 
@@ -34,6 +37,15 @@ public class NoticiasModel {
         this.imagen = imagen;
         this.fecha = fecha;
         this.likes = likes;
+        this.setLike = false;
+    }
+
+    public boolean isSetLike() {
+        return setLike;
+    }
+
+    public void setSetLike(boolean setLike) {
+        this.setLike = setLike;
     }
 
     public int getEstatus() {
@@ -106,5 +118,20 @@ public class NoticiasModel {
 
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("estatus", estatus);
+        result.put("titulo", titulo);
+        result.put("descripcion", descripcion);
+        result.put("categoria", categoria);
+        result.put("autor", autor);
+        result.put("imagen", imagen);
+        result.put("fecha", fecha);
+        result.put("likes", likes);
+
+        return result;
     }
 }

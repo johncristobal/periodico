@@ -27,5 +27,6 @@
     <string name="sesion">Clic para iniciar sesión</string>
     <string name="title_activity_inicio">InicioActivity</string>
     <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_comentarios">ComentariosActivity</string>
 
 </resources>
