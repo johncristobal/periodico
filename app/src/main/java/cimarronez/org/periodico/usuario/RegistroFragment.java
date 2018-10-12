@@ -3,10 +3,15 @@ package cimarronez.org.periodico.usuario;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import cimarronez.org.periodico.R;
 
@@ -66,6 +71,34 @@ public class RegistroFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_registro, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        final View viewFinal = view;
+        Button registro = view.findViewById(R.id.buttonRegistro);
+
+        registro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText nombre = viewFinal.findViewById(R.id.editNombre);
+                EditText correo = viewFinal.findViewById(R.id.editCorreo);
+                EditText pass1 = viewFinal.findViewById(R.id.editPass);
+                EditText pass2 = viewFinal.findViewById(R.id.editPassAgain);
+
+                if(!pass1.equals(pass2)){
+                    Snackbar.make(v,"Las contraseñas no coinciden...",Snackbar.LENGTH_SHORT).show();
+                }else{
+                    //primero, lasnzas a firebase los datos del usuario
+                    //despues lregistras a autnetication y haces loguin
+                    if (mListener != null) {
+                        mListener.onFragmentInteraction(null);
+                    }
+                }
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

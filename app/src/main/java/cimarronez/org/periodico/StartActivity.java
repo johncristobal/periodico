@@ -1,5 +1,6 @@
 package cimarronez.org.periodico;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -140,6 +141,6 @@ public class StartActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
+        //when press fragment button, comes here
     }
 }
