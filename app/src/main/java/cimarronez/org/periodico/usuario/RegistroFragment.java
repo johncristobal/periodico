@@ -1,6 +1,7 @@
 package cimarronez.org.periodico.usuario;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import cimarronez.org.periodico.R;
 
@@ -34,6 +42,8 @@ public class RegistroFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private FirebaseAuth mAuth;
 
     public RegistroFragment() {
         // Required empty public constructor
@@ -77,6 +87,7 @@ public class RegistroFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
         final View viewFinal = view;
         Button registro = view.findViewById(R.id.buttonRegistro);
 
@@ -88,17 +99,50 @@ public class RegistroFragment extends Fragment {
                 EditText pass1 = viewFinal.findViewById(R.id.editPass);
                 EditText pass2 = viewFinal.findViewById(R.id.editPassAgain);
 
-                if(!pass1.equals(pass2)){
+                if(!pass1.getText().toString().equals(pass2.getText().toString())){
                     Snackbar.make(v,"Las contraseñas no coinciden...",Snackbar.LENGTH_SHORT).show();
                 }else{
-                    //primero, lasnzas a firebase los datos del usuario
-                    //despues lregistras a autnetication y haces loguin
-                    if (mListener != null) {
-                        mListener.onFragmentInteraction(null);
-                    }
+                    //1. lregistras a autnetication y haces loguin
+                    //si el registro queda, entonces si lanzas a firebase los datos
+                    registroFirebase(correo.getText().toString(),pass1.getText().toString(),nombre.getText().toString());
                 }
             }
         });
+    }
+
+    public void registroFirebase(final String correo, String pass, final String nombre){
+
+        mAuth.createUserWithEmailAndPassword(correo, pass)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        //Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Fallo el regsitro. Intenta mas tarde...", Toast.LENGTH_SHORT).show();
+                            /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName("")
+                                    .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                    .build();*/
+
+                        }else{
+                            //sucess on login, then update data correo and telefono,
+                            //also, create user firabase...
+                            SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+                            preferences.edit().putString("nombre",nombre).apply();
+                            preferences.edit().putString("correo",correo).apply();
+
+                            //guardar datos de usuario en firebaswe???
+                            //2. lasnzas a firebase los datos del usuario
+                            if (mListener != null) {
+                                mListener.onFragmentInteraction(null);
+                            }
+                        }
+                    }
+                });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

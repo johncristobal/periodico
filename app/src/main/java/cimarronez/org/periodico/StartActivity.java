@@ -1,6 +1,7 @@
 package cimarronez.org.periodico;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import cimarronez.org.periodico.Noticias.Fragments.AvisosFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BlankFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BuscarFragment;
+import cimarronez.org.periodico.settings.SettingsActivity;
 
 public class StartActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -117,12 +119,20 @@ public class StartActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
             fragment = new BlankFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
 
         } else if (id == R.id.nav_gallery) {
             fragment = new AvisosFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
 
         } else if (id == R.id.nav_slideshow) {
-            fragment = new BuscarFragment();
+            //fragment = new BuscarFragment();
+            Intent settings = new Intent(this, SettingsActivity.class);
+            startActivity(settings);
 
         }/* else if (id == R.id.nav_manage) {
 
@@ -131,9 +141,7 @@ public class StartActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }*/
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
+
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

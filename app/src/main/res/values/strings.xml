@@ -28,5 +28,6 @@
     <string name="title_activity_inicio">InicioActivity</string>
     <string name="title_activity_start">StartActivity</string>
     <string name="title_activity_comentarios">ComentariosActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>
