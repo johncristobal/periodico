@@ -20,31 +20,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView11"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_launcher_foreground"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="16dp" />
+            android:layout_weight="2"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                android:indeterminate="true"
+                android:visibility="gone"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher_foreground" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/textViewNombre"
             android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:onClick="iniciarSesion"
-            android:text="Iniciar sesión"
-            tools:layout_editor_absoluteX="116dp"
-            tools:layout_editor_absoluteY="157dp" />
+            android:text="Iniciar sesión"/>
 
         <TextView
             android:id="@+id/textViewCorreo"
             android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:layout_editor_absoluteX="102dp"
-            tools:layout_editor_absoluteY="131dp" />
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout

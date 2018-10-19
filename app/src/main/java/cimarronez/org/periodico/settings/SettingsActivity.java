@@ -4,14 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import cimarronez.org.periodico.MainActivity;
 import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.usuario.LoginActivity;
 
@@ -21,6 +32,9 @@ public class SettingsActivity extends AppCompatActivity {
     public TextView usuarioClose;
     TextView textViewNombre;
     TextView textViewCorreo;
+    public ImageView imageView11;
+    public static FirebaseAuth mAuth;
+    public ProgressBar bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,25 +46,18 @@ public class SettingsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        bar = findViewById(R.id.progressBar2);
+        misdatos = findViewById(R.id.misdatosText);
+        usuarioClose = findViewById(R.id.usuarioClose);
+        textViewNombre = findViewById(R.id.textViewNombre);
+        textViewCorreo = findViewById(R.id.textViewCorreo);
+        imageView11 = findViewById(R.id.imageView11);
 
         SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
         String sesion = preferences.getString("sesion","null");
         if(sesion.equals("1")) {
-            misdatos = findViewById(R.id.misdatosText);
             misdatos.setVisibility(View.VISIBLE);
-            usuarioClose = findViewById(R.id.usuarioClose);
             usuarioClose.setVisibility(View.VISIBLE);
-
-            textViewNombre = findViewById(R.id.textViewNombre);
-            textViewCorreo = findViewById(R.id.textViewCorreo);
 
             textViewNombre.setText(preferences.getString("nombre","null"));
             textViewCorreo.setText(preferences.getString("correo","null"));
@@ -74,11 +81,41 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void cerrarSesion(View view) {
         //borrar preferencia...
+        bar.setVisibility(View.VISIBLE);
+        textViewNombre.setVisibility(View.INVISIBLE);
+        textViewCorreo.setVisibility(View.INVISIBLE);
+        imageView11.setVisibility(View.INVISIBLE);
+
         SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
         preferences.edit().putString("sesion","null").apply();
-        finish();
+        //preferences.edit().putStringSet("idList",null).apply();
 
+        FirebaseAuth.getInstance().signOut();
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signInAnonymously()
+            .addOnCompleteListener(SettingsActivity.this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        //Log.d(TAG, "signInAnonymously:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        finish();
 
+                        //updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        //Log.w(TAG, "signInAnonymously:failure", task.getException());
+                        Toast.makeText(SettingsActivity.this, "Fallo la autenticaciòn...", Toast.LENGTH_SHORT).show();
+                        bar.setVisibility(View.GONE);
+                        textViewNombre.setVisibility(View.VISIBLE);
+                        textViewCorreo.setVisibility(View.VISIBLE);
+                        imageView11.setVisibility(View.VISIBLE);
+
+                        //updateUI(null);
+                    }
+                }
+            });
         //quitar usuasrio de firebase...
     }
 
@@ -89,13 +126,8 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
         String sesion = preferences.getString("sesion","null");
         if(sesion.equals("1")) {
-            misdatos = findViewById(R.id.misdatosText);
             misdatos.setVisibility(View.VISIBLE);
-            usuarioClose = findViewById(R.id.usuarioClose);
             usuarioClose.setVisibility(View.VISIBLE);
-
-            textViewNombre = findViewById(R.id.textViewNombre);
-            textViewCorreo = findViewById(R.id.textViewCorreo);
 
             textViewNombre.setText(preferences.getString("nombre","null"));
             textViewCorreo.setText(preferences.getString("correo","null"));

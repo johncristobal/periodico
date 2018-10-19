@@ -35,7 +35,25 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 mAuth = FirebaseAuth.getInstance();
-                mAuth.signInWithEmailAndPassword(getString(R.string.mailDefault), getString(R.string.passDefault))
+                mAuth.signInAnonymously()
+                        .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    //Log.d(TAG, "signInAnonymously:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    updateUI(user);
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    //Log.w(TAG, "signInAnonymously:failure", task.getException());
+                                    Toast.makeText(MainActivity.this, "Fallo la autenticaciòn...", Toast.LENGTH_SHORT).show();
+
+                                    updateUI(null);
+                                }
+                            }
+                        });
+                /*mAuth.signInWithEmailAndPassword(getString(R.string.mailDefault), getString(R.string.passDefault))
                     .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -51,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                                 updateUI(null);
                             }
                         }
-                    });
+                    });*/
             }
         };
         Timer timer= new Timer();
@@ -65,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             //Intent i = new Intent(getApplicationContext(), ShareSMActivity.class);
             startActivity(i);
         }else{
-            Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Fallo la autenticacion.", Toast.LENGTH_SHORT).show();
         }
     }
 }

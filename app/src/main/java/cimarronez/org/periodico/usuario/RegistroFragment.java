@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,6 +46,8 @@ public class RegistroFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private FirebaseAuth mAuth;
+    public ProgressBar bar;
+    public Button registro;
 
     public RegistroFragment() {
         // Required empty public constructor
@@ -90,7 +93,8 @@ public class RegistroFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         final View viewFinal = view;
-        Button registro = view.findViewById(R.id.buttonRegistro);
+        registro  = view.findViewById(R.id.buttonRegistro);
+        bar = view.findViewById(R.id.progressBar33);
 
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +107,8 @@ public class RegistroFragment extends Fragment {
                 if(!pass1.getText().toString().equals(pass2.getText().toString())){
                     Snackbar.make(v,"Las contraseñas no coinciden...",Snackbar.LENGTH_SHORT).show();
                 }else{
+                    bar.setVisibility(View.VISIBLE);
+                    registro.setVisibility(View.GONE);
                     //1. lregistras a autnetication y haces loguin
                     //si el registro queda, entonces si lanzas a firebase los datos
                     registroFirebase(correo.getText().toString(),pass1.getText().toString(),nombre.getText().toString());
@@ -123,6 +129,9 @@ public class RegistroFragment extends Fragment {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
+
+                            bar.setVisibility(View.GONE);
+                            registro.setVisibility(View.VISIBLE);
                             Toast.makeText(getActivity(), "Fallo el registro. Intenta mas tarde...", Toast.LENGTH_SHORT).show();
                         }else{
                             //sucess on login, then update data correo and telefono,
@@ -142,17 +151,22 @@ public class RegistroFragment extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
+                                            bar.setVisibility(View.GONE);
+                                            registro.setVisibility(View.VISIBLE);
+                                            if (mListener != null) {
+                                                mListener.onFragmentInteraction(null);
+                                            }
                                             //Log.d(TAG, "User profile updated.");
                                         }else{
+                                            bar.setVisibility(View.GONE);
+                                            registro.setVisibility(View.VISIBLE);
+                                            Toast.makeText(getActivity(), "Fallo el registro. Intenta mas tarde...", Toast.LENGTH_SHORT).show();
 
                                         }
                                     }
                                 });
                             //guardar datos de usuario en firebaswe???
                             //2. lasnzas a firebase los datos del usuario
-                            if (mListener != null) {
-                                mListener.onFragmentInteraction(null);
-                            }
                         }
                     }
                 });

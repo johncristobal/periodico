@@ -135,6 +135,8 @@ public class BlankFragment extends Fragment {
         tabs.setupWithViewPager(viewPager);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabs.setVisibility(View.GONE);
+
+        StartActivity.flag = true;
     }
 
     @Override

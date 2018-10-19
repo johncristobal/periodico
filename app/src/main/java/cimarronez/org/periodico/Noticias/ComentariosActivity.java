@@ -96,7 +96,7 @@ public class ComentariosActivity extends AppCompatActivity {
             myRef.child("comentarios").child(idNota).child(keyArticle).updateChildren(postValuesArticle);
 
             //mandamos comentasrio, ahora actualizamos lista...
-            comentariosList.add(article);
+            comentariosList.add(0,article);
 
             adapter.notifyDataSetChanged();
         }

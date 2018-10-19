@@ -29,6 +29,7 @@ public class StartActivity extends AppCompatActivity
         BuscarFragment.OnFragmentInteractionListenerBuscar{
 
     DrawerLayout drawer;
+    public static boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +146,18 @@ public class StartActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(flag) {
+            BlankFragment fragment = new BlankFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+        }
     }
 
     @Override

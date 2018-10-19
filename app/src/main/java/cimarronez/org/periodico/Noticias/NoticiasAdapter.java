@@ -28,7 +28,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.ShowImageActivity;
@@ -46,6 +48,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
     public ArrayList<NoticiasModel> notas;
     public String sesion;
     //private final RecyclerViewOnItemClickListener listener;
+    public Set<String> set;
 
     public NoticiasAdapter(Context c, ArrayList<NoticiasModel> notas){
         context = c;
@@ -133,13 +136,30 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         });
 
         holder.textlikes.setText(String.format("%d", notas.get(position).getLikes()));
+        sesion = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getString("sesion","null");
+
+        if(sesion.equals("1")) {
+            set = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getStringSet("idList", null);
+            if (set != null) {
+                for (String s : set) {
+                    if (notas.get(position).getId().equals(s)) {
+                        notas.get(position).setSetLike(true);
+                        holder.likeImage.setImageResource(R.drawable.likeplus);
+                    }
+                }
+            } else {
+                set = new HashSet<String>();
+            }
+        }
+
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //estyo es mas facil
                 //Toast.makeText(context,"Like "+position,Toast.LENGTH_SHORT).show();
-                sesion = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getString("sesion","null");
+
                 if(sesion.equals("1")){
+
                     int likes = notas.get(position).getLikes();
 
                     if(notas.get(position).isSetLike()) {
@@ -147,12 +167,15 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                         //manita blanca
                         holder.likeImage.setImageResource(R.drawable.like);
                         likes--;
+                        set.remove(notas.get(position).getId());
                     }else{
                         notas.get(position).setSetLike(true);
                         holder.likeImage.setImageResource(R.drawable.likeplus);
                         //manita negra
                         likes++;
+                        set.add(notas.get(position).getId());
                     }
+                    context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).edit().putStringSet("idList", set).apply();
 
                     //update firebase child, set lieks = likes
                     notas.get(position).setLikes(likes);
@@ -168,19 +191,19 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         holder.comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(context,"comment "+position,Toast.LENGTH_SHORT).show();
-                //AGREGAMOS comentario....ahora a afinar la logica...
-                //abrir visra con comentarios...
-                //ir por lista de comentarios y visualizarlos
-                //la vista debe tener el recycler y un lugar para agregar comenario
-                sesion = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getString("sesion","null");
-                if(sesion.equals("1")){
-                    Intent ii = new Intent(context,ComentariosActivity.class);
-                    ii.putExtra("id", notas.get(position).getId());
-                    context.startActivity(ii);
-                }else{
-                    iniciarSesion();
-                }
+            //Toast.makeText(context,"comment "+position,Toast.LENGTH_SHORT).show();
+            //AGREGAMOS comentario....ahora a afinar la logica...
+            //abrir visra con comentarios...
+            //ir por lista de comentarios y visualizarlos
+            //la vista debe tener el recycler y un lugar para agregar comenario
+            sesion = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getString("sesion","null");
+            if(sesion.equals("1")){
+                Intent ii = new Intent(context,ComentariosActivity.class);
+                ii.putExtra("id", notas.get(position).getId());
+                context.startActivity(ii);
+            }else{
+                iniciarSesion();
+            }
 
             }
         });
