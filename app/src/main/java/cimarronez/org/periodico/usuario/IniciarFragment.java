@@ -1,6 +1,7 @@
 package cimarronez.org.periodico.usuario;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import cimarronez.org.periodico.R;
 
@@ -28,6 +38,7 @@ public class IniciarFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     public Context context;
+    private FirebaseAuth mAuth;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -77,14 +88,62 @@ public class IniciarFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button iniciar = view.findViewById(R.id.buttonStart);
+        mAuth = FirebaseAuth.getInstance();
+
+        final ProgressBar bar = view.findViewById(R.id.progressBar3);
+        final EditText correo = view.findViewById(R.id.editCorreo);
+        final EditText pass = view.findViewById(R.id.editPass);
+        final Button iniciar = view.findViewById(R.id.buttonStart);
         iniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (mListener != null) {
-                    mListener.onFragmentInteraction(null);
-                }
+            if(correo.getText().toString().equals("")){
+                Toast.makeText(getActivity(),"Introduce correo válido",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(pass.getText().toString().equals("")){
+                Toast.makeText(getActivity(),"Introduce password válido",Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            bar.setVisibility(View.VISIBLE);
+            iniciar.setVisibility(View.GONE);
+
+            //now, check if you can login
+            mAuth.signInWithEmailAndPassword(correo.getText().toString(), pass.getText().toString())
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            //Log.d(TAG, "signInWithEmail:success");
+                            bar.setVisibility(View.GONE);
+                            iniciar.setVisibility(View.VISIBLE);
+
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+                            preferences.edit().putString("nombre",user.getDisplayName()).apply();
+                            preferences.edit().putString("correo",correo.getText().toString()).apply();
+
+                            if (mListener != null) {
+                                mListener.onFragmentInteraction(null);
+                            }
+                            //updateUI(user);
+                        } else {
+                            bar.setVisibility(View.GONE);
+                            iniciar.setVisibility(View.VISIBLE);
+                            // If sign in fails, display a message to the user.
+                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(getActivity(), "Favor de revisar sus datos.",Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+
+
             }
         });
     }

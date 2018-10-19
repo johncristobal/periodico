@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import cimarronez.org.periodico.R;
@@ -122,12 +123,7 @@ public class RegistroFragment extends Fragment {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Fallo el regsitro. Intenta mas tarde...", Toast.LENGTH_SHORT).show();
-                            /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName("")
-                                    .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
-                                    .build();*/
-
+                            Toast.makeText(getActivity(), "Fallo el registro. Intenta mas tarde...", Toast.LENGTH_SHORT).show();
                         }else{
                             //sucess on login, then update data correo and telefono,
                             //also, create user firabase...
@@ -135,6 +131,23 @@ public class RegistroFragment extends Fragment {
                             preferences.edit().putString("nombre",nombre).apply();
                             preferences.edit().putString("correo",correo).apply();
 
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(nombre)
+                                //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                .build();
+
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            user.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            //Log.d(TAG, "User profile updated.");
+                                        }else{
+
+                                        }
+                                    }
+                                });
                             //guardar datos de usuario en firebaswe???
                             //2. lasnzas a firebase los datos del usuario
                             if (mListener != null) {

@@ -17,6 +17,11 @@ import cimarronez.org.periodico.usuario.LoginActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    public TextView misdatos;
+    public TextView usuarioClose;
+    TextView textViewNombre;
+    TextView textViewCorreo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +44,13 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
         String sesion = preferences.getString("sesion","null");
         if(sesion.equals("1")) {
-            TextView misdatos = findViewById(R.id.misdatosText);
+            misdatos = findViewById(R.id.misdatosText);
             misdatos.setVisibility(View.VISIBLE);
-            TextView usuarioClose = findViewById(R.id.usuarioClose);
+            usuarioClose = findViewById(R.id.usuarioClose);
             usuarioClose.setVisibility(View.VISIBLE);
 
-            TextView textViewNombre = findViewById(R.id.textViewNombre);
-            TextView textViewCorreo = findViewById(R.id.textViewCorreo);
+            textViewNombre = findViewById(R.id.textViewNombre);
+            textViewCorreo = findViewById(R.id.textViewCorreo);
 
             textViewNombre.setText(preferences.getString("nombre","null"));
             textViewCorreo.setText(preferences.getString("correo","null"));
@@ -75,5 +80,25 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         //quitar usuasrio de firebase...
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+        String sesion = preferences.getString("sesion","null");
+        if(sesion.equals("1")) {
+            misdatos = findViewById(R.id.misdatosText);
+            misdatos.setVisibility(View.VISIBLE);
+            usuarioClose = findViewById(R.id.usuarioClose);
+            usuarioClose.setVisibility(View.VISIBLE);
+
+            textViewNombre = findViewById(R.id.textViewNombre);
+            textViewCorreo = findViewById(R.id.textViewCorreo);
+
+            textViewNombre.setText(preferences.getString("nombre","null"));
+            textViewCorreo.setText(preferences.getString("correo","null"));
+        }
     }
 }

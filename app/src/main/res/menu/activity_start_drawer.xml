@@ -6,14 +6,17 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
+            android:checkable="true"
             android:icon="@drawable/ic_menu_camera"
             android:title="Noticias" />
         <item
             android:id="@+id/nav_gallery"
+            android:checkable="true"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Editorial" />
         <item
             android:id="@+id/nav_slideshow"
+            android:checkable="true"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Configuraciones" />
 
