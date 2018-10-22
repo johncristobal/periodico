@@ -3,10 +3,13 @@ package cimarronez.org.periodico.settings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -51,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         usuarioClose = findViewById(R.id.usuarioClose);
         textViewNombre = findViewById(R.id.textViewNombre);
         textViewCorreo = findViewById(R.id.textViewCorreo);
-        imageView11 = findViewById(R.id.imageView11);
+        imageView11 = findViewById(R.id.imageViewProfile);
 
         SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
         String sesion = preferences.getString("sesion","null");
@@ -72,6 +75,18 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void misDatos(View v){
+        Intent intent = new Intent(this, DatosActivity.class);
+        // Pass data object in the bundle and populate details activity.
+        //intent.putExtra(DetailsActivity.EXTRA_CONTACT, contact);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, imageView11, ViewCompat.getTransitionName(imageView11));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            startActivity(intent, options.toBundle());
+        }else{
+            startActivity(intent);
+        }
     }
 
     public void iniciarSesion(View view) {

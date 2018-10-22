@@ -24,6 +24,7 @@
 
         <EditText
             android:id="@+id/editNombre"
+            android:backgroundTint="@color/primary_light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre"
@@ -49,6 +50,7 @@
             android:id="@+id/editCorreo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/primary_light"
             android:hint="Correo"
             android:textColor="@color/primary_light"
             android:textColorHint="@color/primary_light" />
@@ -73,6 +75,8 @@
             android:id="@+id/editPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:backgroundTint="@color/primary_light"
             android:hint="Contraseña"
             android:textColor="@color/primary_light"
             android:textColorHint="@color/primary_light" />
@@ -97,7 +101,9 @@
             android:id="@+id/editPassAgain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/primary_light"
             android:hint="Confirmar contraseña"
+            android:inputType="textPassword"
             android:textColor="@color/primary_light"
             android:textColorHint="@color/primary_light" />
     </android.support.design.widget.TextInputLayout>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".settings.DatosActivity"
+    tools:showIn="@layout/activity_datos">
+
+    <ScrollView
+        android:id="@+id/scrollView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageViewProfile"
+                android:layout_width="220dp"
+                android:layout_height="224dp"
+                android:transitionName="profile"
+                android:layout_gravity="center"
+                app:srcCompat="@mipmap/ic_launcher_foreground"
+                android:onClick="seleccionarFoto"
+                tools:layout_editor_absoluteX="72dp"
+                tools:layout_editor_absoluteY="16dp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutNombre"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/primary_light"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="224dp">
+
+                <EditText
+                    android:id="@+id/editNombreDatos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/primary_light"
+                    android:hint="Nombre"
+                    android:textColor="@color/primary_light"
+                    android:textColorHint="@color/primary_light" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutCorreo"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/primary_light">
+
+                <EditText
+                    android:id="@+id/editCorreoDatos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/primary_light"
+                    android:hint="Correo"
+                    android:textColor="@color/primary_light"
+                    android:textColorHint="@color/primary_light" />
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:id="@+id/RelativebuttonStartRegistro"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@drawable/back_button"
+                android:textColor="@color/colorPrimaryDark">
+
+                <ProgressBar
+                    android:id="@+id/progressBar33"
+                    style="?android:attr/progressBarStyle"
+                    android:visibility="gone"
+                    android:indeterminate="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
+
+                <Button
+                    android:id="@+id/buttonRegistro"
+                    android:background="@drawable/back_button"
+                    android:text="Actualizar datos"
+                    android:onClick="actualizaDatos"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

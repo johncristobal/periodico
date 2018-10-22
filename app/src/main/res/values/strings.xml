@@ -29,5 +29,9 @@
     <string name="title_activity_start">StartActivity</string>
     <string name="title_activity_comentarios">ComentariosActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_datos">DatosActivity</string>
+    <string name="tomafoto">Tomar foto</string>
+    <string name="galeria">Galería</string>
+    <string name="sharedName">shared</string>
 
 </resources>
