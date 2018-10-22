@@ -2,8 +2,13 @@ package cimarronez.org.periodico;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -16,11 +21,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
 
 import cimarronez.org.periodico.Noticias.Fragments.AvisosFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BlankFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BuscarFragment;
 import cimarronez.org.periodico.settings.SettingsActivity;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StartActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -30,6 +47,9 @@ public class StartActivity extends AppCompatActivity
 
     DrawerLayout drawer;
     public static boolean flag = false;
+
+    public CircleImageView imagen;
+    public TextView textViewHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +80,30 @@ public class StartActivity extends AppCompatActivity
                 .commit();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null)
+        if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
+            View headerView = navigationView.getHeaderView(0);
+            imagen = headerView.findViewById(R.id.imageViewHeader);
+            textViewHeader = headerView.findViewById(R.id.textViewHeader);
 
+        }
+
+        SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+
+        if(preferences.getString("sesion", "null").equals("1")) {
+
+            textViewHeader.setText(String.format("Hola de nuevo %s", preferences.getString("nombre", "null")));
+
+            if (!preferences.getString("nombrefoto", "null").equals("null")) {
+                String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
+                //Bitmap bmp = BitmapFactory.decodeFile(filePath);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
+
+                imagen.setImageBitmap(bmp);
+            }
+        }
     }
 
     public void updateView(String title) {
@@ -157,6 +198,66 @@ public class StartActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();
+        }
+
+        final SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+
+        if(preferences.getString("sesion", "null").equals("1")) {
+
+            textViewHeader.setText(String.format("Hola de nuevo %s", preferences.getString("nombre", "null")));
+
+            if (!preferences.getString("nombrefoto", "null").equals("null")) {
+                String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
+                //Bitmap bmp = BitmapFactory.decodeFile(filePath);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
+
+                imagen.setImageBitmap(bmp);
+            }else{
+                FirebaseAuth mAuth =  FirebaseAuth.getInstance();;
+                //recuperamps imagen y la guardams en local
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReferenceFromUrl("gs://cimarronez.appspot.com/");
+                StorageReference islandRef = storageRef.child("usuarios/"+mAuth.getUid()+"/perfil.png");
+
+                File path = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator);
+                if(!path.exists()){
+                    path.mkdirs();
+                }
+
+                final File localFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"perfil.png");
+                //save name jajaja
+                //SharedPreferences preferences = getSharedPreferences(getString(R.string.sharedName), Context.MODE_PRIVATE);
+
+                //File localFile = File.createTempFile("images", "jpg");
+
+                islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        // Local temp file has been created
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("nombrefoto",localFile.getAbsolutePath());
+                        editor.apply();
+
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 4;
+                        Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath(), options);
+
+                        imagen.setImageBitmap(bmp);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
+            }
+        }else{
+            textViewHeader.setText("NCAS");
+            imagen.setImageResource(R.drawable.backicon);
+
         }
     }
 

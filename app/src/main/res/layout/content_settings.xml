@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="180dp"
+        android:layout_height="200dp"
         android:layout_marginBottom="2dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
@@ -33,13 +33,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewProfile"
-                android:transitionName="profile"
                 android:onClick="misDatos"
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_launcher_foreground" />
+                android:layout_height="90dp"
+                android:transitionName="profile"
+                android:src="@drawable/backicon" />
+
         </RelativeLayout>
 
         <TextView

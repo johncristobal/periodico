@@ -8,11 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -25,9 +28,26 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -37,11 +57,18 @@ public class DatosActivity extends AppCompatActivity {
 
     EditText textViewNombre,textViewCorreo;
     private String userChoosenTask;
+    private ImageView perfi;
+    public boolean flagFoto;
+    public static FirebaseAuth mAuth;
 
     private int REQUEST_CAMERA = 10;
     private int SELECT_FILE = 20;
     public File photoFile = null;
     public String mCurrentPhotoPath;
+    SharedPreferences preferences;
+
+    public ProgressBar progressBar33;
+    public Button buttonRegistro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,38 +84,143 @@ public class DatosActivity extends AppCompatActivity {
 
         textViewNombre = findViewById(R.id.editNombreDatos);
         textViewCorreo = findViewById(R.id.editCorreoDatos);
+        buttonRegistro = findViewById(R.id.buttonRegistro);
+        progressBar33 = findViewById(R.id.progressBar33);
 
+        perfi = findViewById(R.id.imageViewProfile);
+        flagFoto = false;
         //get data from user prifle and show here
-        SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+        preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
         textViewNombre.setText(preferences.getString("nombre","null"));
         textViewCorreo.setText(preferences.getString("correo","null"));
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        if(!preferences.getString("nombrefoto", "null").equals("null")){
+            String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
+            //Bitmap bmp = BitmapFactory.decodeFile(filePath);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
+            Bitmap bmp = BitmapFactory.decodeFile(filePath,options);
+
+            perfi.setImageBitmap(bmp);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) // Press Back Icon
         {
-            //finish();
             supportFinishAfterTransition();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+//===================update data====================================================================
     public void actualizaDatos(View view) {
         //actualizar user firebase, shaeredpreferences
+
+        progressBar33.setVisibility(View.VISIBLE);
+        buttonRegistro.setVisibility(View.GONE);
         if(!textViewNombre.getText().toString().equals("") && !textViewCorreo.getText().toString().equals("")){
             //actualizao info
+            //update user info
 
+            preferences.edit().putString("nombre",textViewNombre.getText().toString()).apply();
+            preferences.edit().putString("correo",textViewCorreo.getText().toString()).apply();
+
+            mAuth = FirebaseAuth.getInstance();
+            final FirebaseUser user = mAuth.getCurrentUser();
+
+            if(flagFoto){
+                //update foto
+
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReferenceFromUrl("gs://cimarronez.appspot.com/");
+                final StorageReference ref = storageRef.child("usuarios/"+mAuth.getUid()+"/perfil.png");
+
+                File image = new File(preferences.getString("nombrefoto", "null"));
+                Uri uri = Uri.fromFile(image);
+
+                Bitmap bmp = null;
+                try {
+                    bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 50, baos);
+                    byte[] data = baos.toByteArray();
+
+                    StorageMetadata metadata = new StorageMetadata.Builder()
+                            .setContentType("image/png")
+                            .build();
+                    UploadTask uploadTask = ref.putBytes(data,metadata);
+
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            progressBar33.setVisibility(View.GONE);
+                            buttonRegistro.setVisibility(View.VISIBLE);
+                            Toast.makeText(DatosActivity.this,"Tuvimos un problema al actualizar. Intent más tarde...",Toast.LENGTH_SHORT).show();
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                            Uri downloadUri = taskSnapshot.getUploadSessionUri();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(textViewNombre.getText().toString())
+                                    .setPhotoUri(downloadUri)
+                                    .build();
+
+                            user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        progressBar33.setVisibility(View.GONE);
+                                        buttonRegistro.setVisibility(View.VISIBLE);
+                                        finish();
+                                    }else {
+                                        progressBar33.setVisibility(View.GONE);
+                                        buttonRegistro.setVisibility(View.VISIBLE);
+                                        Toast.makeText(DatosActivity.this,"Tuvimos un problema al actualizar. Intent más tarde...",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    progressBar33.setVisibility(View.GONE);
+                    buttonRegistro.setVisibility(View.VISIBLE);
+                    Toast.makeText(DatosActivity.this,"Tuvimos un problema al actualizar. Intent más tarde...",Toast.LENGTH_SHORT).show();
+                }
+            }else{
+             //no actualizamos foto, solo info
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(textViewNombre.getText().toString())
+                        //.setPhotoUri(downloadUri)
+                        .build();
+
+                user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            progressBar33.setVisibility(View.GONE);
+                            buttonRegistro.setVisibility(View.VISIBLE);
+                            finish();
+                        }else {
+                            progressBar33.setVisibility(View.GONE);
+                            buttonRegistro.setVisibility(View.VISIBLE);
+                            Toast.makeText(DatosActivity.this,"Tuvimos un problema al actualizar. Intent más tarde...",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }else{
+            progressBar33.setVisibility(View.GONE);
+            buttonRegistro.setVisibility(View.VISIBLE);
+            Toast.makeText(this,"Favor de llenar los campos...",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -143,7 +275,7 @@ public class DatosActivity extends AppCompatActivity {
         }
     }
 
-    //***********************Abrir camara para tomar foto***********************************************
+//***********************Abrir camara para tomar foto***********************************************
     private void cameraIntent()
     {
         Intent takepic=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -193,7 +325,7 @@ public class DatosActivity extends AppCompatActivity {
         }
     }
 
-    //***********************save iage to path folder app***********************************************
+//***********************save iage to path folder app***********************************************
     private File createImageFile(String username) throws IOException {
         // Create an image file name
         //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -215,11 +347,40 @@ public class DatosActivity extends AppCompatActivity {
         mCurrentPhotoPath = image.getAbsolutePath();
 
         //save name jajaja
-        SharedPreferences preferences = getSharedPreferences(getString(R.string.sharedName), Context.MODE_PRIVATE);
+        //SharedPreferences preferences = getSharedPreferences(getString(R.string.sharedName), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("nombrefoto",mCurrentPhotoPath);
         editor.apply();
         return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                Log.i("galeria","gale");
+                ///onSelectFromGalleryResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
+        }
+    }
+
+//***********************Recuperamos foto tomada de la camara y mostramos*********************************
+    private void onCaptureImageResult(Intent data) {
+
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.sharedName), Context.MODE_PRIVATE);
+        mCurrentPhotoPath = preferences.getString("nombrefoto", "null");
+
+        String filePath = mCurrentPhotoPath;//photoFile.getPath();
+        //Bitmap bmp = BitmapFactory.decodeFile(filePath);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        Bitmap bmp = BitmapFactory.decodeFile(filePath,options);
+
+        flagFoto = true;
+        perfi.setImageBitmap(bmp);
     }
 
     public static class Utility {

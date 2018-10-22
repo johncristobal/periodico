@@ -3,6 +3,8 @@ package cimarronez.org.periodico.settings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import cimarronez.org.periodico.MainActivity;
 import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.usuario.LoginActivity;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -35,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
     public TextView usuarioClose;
     TextView textViewNombre;
     TextView textViewCorreo;
-    public ImageView imageView11;
+    public CircleImageView imageView11;
     public static FirebaseAuth mAuth;
     public ProgressBar bar;
 
@@ -64,6 +67,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             textViewNombre.setText(preferences.getString("nombre","null"));
             textViewCorreo.setText(preferences.getString("correo","null"));
+
+            if(!preferences.getString("nombrefoto", "null").equals("null")){
+                String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
+                //Bitmap bmp = BitmapFactory.decodeFile(filePath);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                Bitmap bmp = BitmapFactory.decodeFile(filePath,options);
+
+                imageView11.setImageBitmap(bmp);
+            }
         }
     }
 
@@ -146,6 +159,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             textViewNombre.setText(preferences.getString("nombre","null"));
             textViewCorreo.setText(preferences.getString("correo","null"));
+
+            if(!preferences.getString("nombrefoto", "null").equals("null")){
+                String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
+                //Bitmap bmp = BitmapFactory.decodeFile(filePath);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                Bitmap bmp = BitmapFactory.decodeFile(filePath,options);
+
+                imageView11.setImageBitmap(bmp);
+            }
         }
     }
 }

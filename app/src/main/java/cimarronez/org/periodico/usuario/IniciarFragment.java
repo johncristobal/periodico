@@ -2,8 +2,11 @@ package cimarronez.org.periodico.usuario;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,10 +19,17 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
 
 import cimarronez.org.periodico.R;
 
@@ -109,6 +119,7 @@ public class IniciarFragment extends Fragment {
 
             bar.setVisibility(View.VISIBLE);
             iniciar.setVisibility(View.GONE);
+            final SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
 
             //now, check if you can login
             mAuth.signInWithEmailAndPassword(correo.getText().toString(), pass.getText().toString())
@@ -121,14 +132,55 @@ public class IniciarFragment extends Fragment {
                             bar.setVisibility(View.GONE);
                             iniciar.setVisibility(View.VISIBLE);
 
+                            //recuperamps imagen y la guardams en local
+                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                            StorageReference storageRef = storage.getReferenceFromUrl("gs://cimarronez.appspot.com/");
+                            StorageReference islandRef = storageRef.child("usuarios/"+mAuth.getUid()+"/perfil.png");
+
+                            File path = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator);
+                            if(!path.exists()){
+                                path.mkdirs();
+                            }
+
+                            final File localFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"perfil.png");
+                            //save name jajaja
+                            //SharedPreferences preferences = getSharedPreferences(getString(R.string.sharedName), Context.MODE_PRIVATE);
+
+                            //File localFile = File.createTempFile("images", "jpg");
+
+                            islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    // Local temp file has been created
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString("nombrefoto",localFile.getAbsolutePath());
+                                    editor.apply();
+
+                                    //BitmapFactory.Options options = new BitmapFactory.Options();
+                                    //options.inSampleSize = 4;
+                                    //Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath(), options);
+
+                                    //imagen.setImageBitmap(bmp);
+                                    if (mListener != null) {
+                                        mListener.onFragmentInteraction(null);
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle any errors
+                                    if (mListener != null) {
+                                        mListener.onFragmentInteraction(null);
+                                    }
+                                }
+                            });
+
                             FirebaseUser user = mAuth.getCurrentUser();
                             SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
                             preferences.edit().putString("nombre",user.getDisplayName()).apply();
                             preferences.edit().putString("correo",correo.getText().toString()).apply();
 
-                            if (mListener != null) {
-                                mListener.onFragmentInteraction(null);
-                            }
+
                             //updateUI(user);
                         } else {
                             bar.setVisibility(View.GONE);

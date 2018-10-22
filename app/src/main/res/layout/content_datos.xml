@@ -23,7 +23,17 @@
             android:orientation="vertical"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewProfile"
+                android:layout_margin="15dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:transitionName="profile"
+                android:layout_gravity="center"
+                android:src="@drawable/backicon"
+                android:onClick="seleccionarFoto" />
+
+            <!--ImageView
                 android:id="@+id/imageViewProfile"
                 android:layout_width="220dp"
                 android:layout_height="224dp"
@@ -32,7 +42,7 @@
                 app:srcCompat="@mipmap/ic_launcher_foreground"
                 android:onClick="seleccionarFoto"
                 tools:layout_editor_absoluteX="72dp"
-                tools:layout_editor_absoluteY="16dp" />
+                tools:layout_editor_absoluteY="16dp" /-->
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textInputLayoutNombre"
