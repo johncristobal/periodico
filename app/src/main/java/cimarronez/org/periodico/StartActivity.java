@@ -215,44 +215,7 @@ public class StartActivity extends AppCompatActivity
 
                 imagen.setImageBitmap(bmp);
             }else{
-                FirebaseAuth mAuth =  FirebaseAuth.getInstance();;
-                //recuperamps imagen y la guardams en local
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageRef = storage.getReferenceFromUrl("gs://cimarronez.appspot.com/");
-                StorageReference islandRef = storageRef.child("usuarios/"+mAuth.getUid()+"/perfil.png");
-
-                File path = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator);
-                if(!path.exists()){
-                    path.mkdirs();
-                }
-
-                final File localFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"perfil.png");
-                //save name jajaja
-                //SharedPreferences preferences = getSharedPreferences(getString(R.string.sharedName), Context.MODE_PRIVATE);
-
-                //File localFile = File.createTempFile("images", "jpg");
-
-                islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Local temp file has been created
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("nombrefoto",localFile.getAbsolutePath());
-                        editor.apply();
-
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inSampleSize = 4;
-                        Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath(), options);
-
-                        imagen.setImageBitmap(bmp);
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });
+                imagen.setImageResource(R.drawable.backicon);
             }
         }else{
             textViewHeader.setText("NCAS");

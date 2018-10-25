@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/imageView88"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
@@ -40,7 +40,7 @@
         android:textColor="@color/primary"
         app:layout_constraintBottom_toTopOf="@+id/textViewFecha"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintStart_toEndOf="@+id/imageView88"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -54,7 +54,7 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintStart_toEndOf="@+id/imageView88"
         app:layout_constraintTop_toBottomOf="@+id/textViewComentt" />
 
 </android.support.constraint.ConstraintLayout>

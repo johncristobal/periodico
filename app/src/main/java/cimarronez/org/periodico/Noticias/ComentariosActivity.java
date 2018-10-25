@@ -1,6 +1,9 @@
 package cimarronez.org.periodico.Noticias;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,8 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,8 +47,10 @@ public class ComentariosActivity extends AppCompatActivity {
 
     public RecyclerView lista;
     public ComentariosAdapter adapter;
+    public ImageView imageView8;
 
     public EditText comentario;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +69,36 @@ public class ComentariosActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-
+        imageView8 = findViewById(R.id.imageView8);
         idNota = getIntent().getStringExtra("id");
         comentariosList = new ArrayList<>();
         lista = findViewById(R.id.listaComentarios);
 
         comentario = (EditText) findViewById(R.id.editTextAdd);
         comentario.requestFocus();
+        mAuth = FirebaseAuth.getInstance();
 
         //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.showSoftInput(comentario, InputMethodManager.SHOW_IMPLICIT);
+        final SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+        if(preferences.getString("sesion", "null").equals("1")) {
+
+            //textViewHeader.setText(String.format("Hola de nuevo %s", preferences.getString("nombre", "null")));
+
+            if (!preferences.getString("nombrefoto", "null").equals("null")) {
+                String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
+                //Bitmap bmp = BitmapFactory.decodeFile(filePath);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
+
+                imageView8.setImageBitmap(bmp);
+            }else{
+                imageView8.setImageResource(R.drawable.backicon);
+            }
+        }else{
+            imageView8.setImageResource(R.drawable.backicon);
+        }
 
         firebaseListener firebase = new firebaseListener();
         firebase.execute();
@@ -90,7 +117,7 @@ public class ComentariosActivity extends AppCompatActivity {
             SimpleDateFormat dmyFormat = new SimpleDateFormat("dd-MM-yyyy");
             String fecha = dmyFormat.format(myDate);
 
-            ComentariosModel article = new ComentariosModel(keyArticle, 1, "Alex", comentario.getText().toString(), fecha);
+            ComentariosModel article = new ComentariosModel(keyArticle, 1, mAuth.getUid(), comentario.getText().toString(), fecha);
 
             Map<String, Object> postValuesArticle = article.toMap();
             myRef.child("comentarios").child(idNota).child(keyArticle).updateChildren(postValuesArticle);

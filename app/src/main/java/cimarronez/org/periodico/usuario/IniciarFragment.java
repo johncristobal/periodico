@@ -4,20 +4,33 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +43,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import cimarronez.org.periodico.R;
 
@@ -119,7 +134,6 @@ public class IniciarFragment extends Fragment {
 
             bar.setVisibility(View.VISIBLE);
             iniciar.setVisibility(View.GONE);
-            final SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
 
             //now, check if you can login
             mAuth.signInWithEmailAndPassword(correo.getText().toString(), pass.getText().toString())
@@ -134,21 +148,41 @@ public class IniciarFragment extends Fragment {
 
                             //recuperamps imagen y la guardams en local
                             FirebaseStorage storage = FirebaseStorage.getInstance();
-                            StorageReference storageRef = storage.getReferenceFromUrl("gs://cimarronez.appspot.com/");
+                            StorageReference storageRef = storage.getReferenceFromUrl("gs://cimarronez.appspot.com");
                             StorageReference islandRef = storageRef.child("usuarios/"+mAuth.getUid()+"/perfil.png");
 
-                            File path = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator);
-                            if(!path.exists()){
-                                path.mkdirs();
-                            }
-
-                            final File localFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"perfil.png");
                             //save name jajaja
                             //SharedPreferences preferences = getSharedPreferences(getString(R.string.sharedName), Context.MODE_PRIVATE);
 
                             //File localFile = File.createTempFile("images", "jpg");
 
-                            islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+
+                            islandRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    //ImageView imageView = holder.thumbnail;
+                                    Glide.with(getActivity())
+                                        .load(uri.toString())
+                                        .into(new SimpleTarget<Drawable>() {
+
+                                            @Override
+                                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                                saveImage(resource);
+                                            }
+                                        });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle any errors
+                                    //no hay imagen...
+                                    if (mListener != null) {
+                                        mListener.onFragmentInteraction(null);
+                                    }
+                                }
+                            });
+
+                            /*islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                     // Local temp file has been created
@@ -173,11 +207,12 @@ public class IniciarFragment extends Fragment {
                                         mListener.onFragmentInteraction(null);
                                     }
                                 }
-                            });
+                            });*/
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
                             preferences.edit().putString("nombre",user.getDisplayName()).apply();
+                            //Log.e("iamgen",user.getPhotoUrl().getPath());
                             preferences.edit().putString("correo",correo.getText().toString()).apply();
 
 
@@ -198,6 +233,32 @@ public class IniciarFragment extends Fragment {
 
             }
         });
+    }
+
+    private void saveImage(Drawable resource) {
+        try{
+            final SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+
+            File path = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator);
+            if(!path.exists()){
+                path.mkdirs();
+            }
+
+            final File localFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"perfil.png");
+            Bitmap bitmap = ((BitmapDrawable)resource).getBitmap();
+            OutputStream os = new FileOutputStream(localFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("nombrefoto",localFile.getAbsolutePath());
+            editor.apply();
+
+            if (mListener != null) {
+                mListener.onFragmentInteraction(null);
+            }
+        } catch (Exception e){
+            Toast.makeText(getActivity(),"Error en imagen",Toast.LENGTH_SHORT).show();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
