@@ -117,7 +117,7 @@ public class RegistroFragment extends Fragment {
         });
     }
 
-    public void registroFirebase(final String correo, String pass, final String nombre){
+    public void registroFirebase(final String correo, final String pass, final String nombre){
 
         mAuth.createUserWithEmailAndPassword(correo, pass)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -139,6 +139,7 @@ public class RegistroFragment extends Fragment {
                             SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
                             preferences.edit().putString("nombre",nombre).apply();
                             preferences.edit().putString("correo",correo).apply();
+                            preferences.edit().putString("pass",pass).apply();
 
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                 .setDisplayName(nombre)

@@ -212,6 +212,7 @@ public class IniciarFragment extends Fragment {
                             FirebaseUser user = mAuth.getCurrentUser();
                             SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
                             preferences.edit().putString("nombre",user.getDisplayName()).apply();
+                            preferences.edit().putString("pass",pass.getText().toString()).apply();
                             //Log.e("iamgen",user.getPhotoUrl().getPath());
                             preferences.edit().putString("correo",correo.getText().toString()).apply();
 
