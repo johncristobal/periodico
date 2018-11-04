@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -49,7 +50,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import cimarronez.org.periodico.R;
 
@@ -69,6 +72,7 @@ public class DatosActivity extends AppCompatActivity {
 
     public ProgressBar progressBar33;
     public Button buttonRegistro;
+    private int PICK_IMAGE = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +233,7 @@ public class DatosActivity extends AppCompatActivity {
         //mostrar foto y guradr en caso de ...
 
         final CharSequence[] items = {getString(R.string.tomafoto), getString(R.string.galeria),
-                "Cancel"};
+                "Cancelar"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Agregar imagen");
@@ -244,8 +248,8 @@ public class DatosActivity extends AppCompatActivity {
                     //cameraIntent();
                 } else if (items[item].equals(getString(R.string.galeria))) {
                     userChoosenTask = getString(R.string.galeria);
-                    //if (result)
-                        //galleryIntent();
+                    if (result)
+                        galleryIntent();
                 } else if (items[item].equals("Cancelar")) {
                     dialog.dismiss();
                 }
@@ -260,6 +264,13 @@ public class DatosActivity extends AppCompatActivity {
             //Directament abrimos camara
             //permisionCamera();
         }*/
+    }
+
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
     public void permisionCamera(){
@@ -359,9 +370,57 @@ public class DatosActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_FILE)
-                Log.i("galeria","gale");
-                ///onSelectFromGalleryResult(data);
+            if (requestCode == PICK_IMAGE) {
+                Log.i("galeria", "gale");
+                try {
+                    ///onSelectFromGalleryResult(data);
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 4;
+                    //Bitmap bmp = BitmapFactory.decodeFile(filePath,options);
+                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath,options);
+                    flagFoto = true;
+                    perfi.setImageBitmap(bitmap);
+
+                    File path = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"/perfil.png");
+                    if(!path.exists()){
+                        path.mkdirs();
+                    }
+
+                    try {
+                        FileOutputStream out = new FileOutputStream(path);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 80, out); // bmp is your Bitmap instance
+                        // PNG is a lossless format, the compression factor (100) is ignored
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    File image = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"/perfil.png");
+                    mCurrentPhotoPath = image.getAbsolutePath();
+
+                    //save name jajaja
+                    //SharedPreferences preferences = getSharedPreferences(getString(R.string.sharedName), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("nombrefoto",mCurrentPhotoPath);
+                    editor.apply();
+
+                    //salvar la imagen seleccioanda en el archivo creado
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+            }
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
         }
