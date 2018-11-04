@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/primary_light"
                     android:hint="Nombre"
-                    android:textColor="@color/primary_light"
+                    android:textColor="@color/primary"
                     android:textColorHint="@color/primary_light" />
             </android.support.design.widget.TextInputLayout>
 
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/primary_light"
                     android:hint="Correo"
-                    android:textColor="@color/primary_light"
+                    android:textColor="@color/primary"
                     android:textColorHint="@color/primary_light" />
             </android.support.design.widget.TextInputLayout>
 

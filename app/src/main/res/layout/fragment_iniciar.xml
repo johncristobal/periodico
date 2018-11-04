@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".usuario.LoginActivity">
+    tools:context=".usuario.LoginActivity"
+    tools:layout_editor_absoluteY="25dp">
 
     <!--ImageView
         android:id="@+id/imageView3"
@@ -24,16 +24,15 @@
         android:id="@+id/textInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="80dp"
         android:textColorHint="@color/primary_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2">
+        app:layout_constraintTop_toTopOf="parent">
 
         <EditText
             android:id="@+id/editCorreo"
@@ -50,13 +49,12 @@
         android:id="@+id/textInputLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
         android:textColorHint="@color/primary_light"
-        app:layout_constraintBottom_toTopOf="@+id/RelativebuttonStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -66,8 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primary_light"
-            android:inputType="textPassword"
             android:hint="contraseña"
+            android:inputType="textPassword"
             android:textColor="@color/primary_light"
             android:textColorHint="@color/primary_light" />
     </android.support.design.widget.TextInputLayout>
@@ -76,41 +74,40 @@
         android:id="@+id/RelativebuttonStart"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="22dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/back_button"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" >
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
         <ProgressBar
             android:id="@+id/progressBar3"
             style="?android:attr/progressBarStyle"
-            android:visibility="gone"
-            android:indeterminate="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:indeterminate="true"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/buttonStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/back_button"
             android:text="Ingresar"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/colorPrimaryDark" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
         android:text="¿Olvidaste tu contraseña?"
         android:textColor="@color/primary_light"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewRegistro"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RelativebuttonStart" />
 
@@ -118,17 +115,13 @@
         android:id="@+id/textViewRegistro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="58dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
         android:onClick="registroUser"
         android:text="Registrarse"
         android:textColor="@color/primary_light"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 

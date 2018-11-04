@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     String pass = (preferences.getString("pass","null"));
                     String correo = (preferences.getString("correo","null"));
 
+                    mAuth = FirebaseAuth.getInstance();
                     mAuth.signInWithEmailAndPassword(correo,pass)
                             .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -30,15 +31,18 @@ public class ShowImageActivity extends AppCompatActivity {
 
     private ScaleGestureDetector mScaleGestureDetector;
     private float mScaleFactor = 1.0f;
-    private ImageView mImageView;
+    private WebView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image);
 
-        mImageView=(ImageView)findViewById(R.id.imageViewExpand);
-        mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
+        mImageView = findViewById(R.id.imageViewExpand);
+        mImageView.getSettings().setBuiltInZoomControls(true);
+        mImageView.getSettings().setDisplayZoomControls(false);
+
+        //mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
         String id = getIntent().getStringExtra("id");
 
@@ -66,8 +70,10 @@ public class ShowImageActivity extends AppCompatActivity {
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
+                mImageView.loadDataWithBaseURL("file:///android_asset/","<img src='"+uri+"' style='width:100%' />", "text/html", "utf-8", null);
+
             // Got the download URL for 'users/me/profile.png'
-            Glide.with(ShowImageActivity.this)
+            /*Glide.with(ShowImageActivity.this)
                     .load(uri.toString())
                     .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
                     //.load(storageRef)
@@ -75,15 +81,15 @@ public class ShowImageActivity extends AppCompatActivity {
                         @Override
                         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
 
-                            if(resource.getIntrinsicWidth() > resource.getIntrinsicHeight()){
-                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                            }
+                            //if(resource.getIntrinsicWidth() > resource.getIntrinsicHeight()){
+                             //   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                           // }
 
-                            mImageView.setImageDrawable(resource);
+                            //mImageView.setImageDrawable(resource);
                             Log.i("width",resource.getIntrinsicWidth()+"");
                             Log.i("heigth",resource.getIntrinsicHeight()+"");
                         }
-                    });
+                    });*/
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -94,11 +100,11 @@ public class ShowImageActivity extends AppCompatActivity {
         });
     }
 
-    @Override
+    /*@Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         mScaleGestureDetector.onTouchEvent(motionEvent);
         return true;
-    }
+    }*/
 
     public void cerrarVentana(View v){
         finish();
