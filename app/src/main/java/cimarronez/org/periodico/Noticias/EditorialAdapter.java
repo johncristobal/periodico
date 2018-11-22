@@ -1,33 +1,34 @@
 package cimarronez.org.periodico.Noticias;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
+import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -35,9 +36,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import cimarronez.org.periodico.R;
@@ -45,21 +48,22 @@ import cimarronez.org.periodico.ShowImageActivity;
 import cimarronez.org.periodico.usuario.LoginActivity;
 import jp.wasabeef.blurry.Blurry;
 
-import static cimarronez.org.periodico.Noticias.Fragments.BlankFragment.categorias;
-import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
+import static cimarronez.org.periodico.Noticias.Fragments.AvisosFragment.modelostatiscoedit;
 
-public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
+public class EditorialAdapter extends RecyclerView.Adapter<EditorialAdapter.MyViewHolder> {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
 
+    Bitmap imageSelected;
+
     public Context context;
-    public ArrayList<NoticiasModel> notas;
+    public ArrayList<EditorialModel> notas;
     public String sesion;
     //private final RecyclerViewOnItemClickListener listener;
     public Set<String> set;
 
-    public NoticiasAdapter(Context c, ArrayList<NoticiasModel> notas){
+    public EditorialAdapter(Context c, ArrayList<EditorialModel> notas){
         context = c;
         this.notas = notas;
         //this.listener = listener;
@@ -69,19 +73,19 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.listprincipalitem, parent, false);
+                .inflate(R.layout.editorial_item, parent, false);
 
-        return new NoticiasAdapter.MyViewHolder(itemView);
+        return new EditorialAdapter.MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        NoticiasModel modelo = notas.get(position);
+        EditorialModel modelo = notas.get(position);
         holder.title.setText(modelo.getTitulo());
         holder.autor.setText(modelo.getAutor());
-        holder.categoria.setText(categorias.get(modelo.getCategoria()));//String.format("%d", modelo.getCategoria()));
+        //holder.categoria.setText(categorias.get(modelo.getCategoria()));//String.format("%d", modelo.getCategoria()));
         //holder.categoria.setText("Categoria "+position);//String.format("%d", modelo.getCategoria()));
-        holder.tiempo.setText(modelo.getFecha());
+        //holder.tiempo.setText(modelo.getFecha());
 
         /*Glide.with(context)
                 //.load(uri.toString())
@@ -90,15 +94,8 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                 .into(holder.thumbnail);*/
 
         //Blurry.with(context).capture(holder).into(holder.thumbnail);
-        /*Blurry.with(context)
-                .radius(25)
-                .sampling(1)
-                .color(Color.argb(66, 0, 255, 255))
-                .async()
-                .capture(holder.thumbnail)
-                .into(holder.thumbnail);*/
 
-        final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(modelo.getId()+"/foto0.jpg");
+        final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("editoriales").child(modelo.getId()+"/foto0.jpg");
 
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -106,10 +103,36 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                 //ImageView imageView = holder.thumbnail;
                 // Got the download URL for 'users/me/profile.png'
                 Glide.with(context)
+                    .load(uri.toString())
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                    //.load(storageRef)
+                    .into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+
+                            Bitmap bitmap = ((BitmapDrawable)resource).getBitmap();
+                            holder.thumbnail.setImageDrawable(resource);
+                            //imageSelected = bitmap;
+                            /*Blurry.with(context)
+                                    .radius(5)
+                                    .sampling(2)
+                                    //color(Color.argb(66, 255, 255, 0))
+                                    .async()
+                                    .animate(500)
+                                    .from(bitmap)
+                                    .into(holder.thumbnail);*/
+                        }
+                    });
+
+                /*Glide.with(context)
                         .load(uri.toString())
                         //.load(storageRef)
-                        .apply(new RequestOptions().override(100, 100).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
-                        .into(holder.thumbnail);
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+//                        .apply(new RequestOptions().override(100, 100).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                        .into(holder.thumbnail);*/
+
+                //Blurry.with(context).capture(view).into(holder.thumbnail);
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -130,8 +153,8 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                     context.startActivity(ii);
                 }
                 else {
-                    Intent i = new Intent(context, DetallesActivity.class);
-                    modelostatisco = notas.get(position);
+                    Intent i = new Intent(context, DetallesEditorialActivity.class);
+                    modelostatiscoedit = notas.get(position);
                     context.startActivity(i);
                 }
             }
@@ -140,20 +163,48 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //Blurry.delete((ViewGroup)holder.thumbnail.getParent());
+                Bitmap bitmap = ((BitmapDrawable)holder.thumbnail.getDrawable()).getBitmap();
+
+                File f3=new File(Environment.getExternalStorageDirectory()+"/inpaint/");
+                if(!f3.exists())
+                    f3.mkdirs();
+                OutputStream outStream = null;
+                File file = new File(Environment.getExternalStorageDirectory() + "/inpaint/"+"seconds"+".png");
+                if(file.exists())
+                    file.delete();
+
+                try {
+                    outStream = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outStream);
+                    outStream.close();
+                    //Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 if(notas.get(position).getDescripcion().equals("")){
                     Intent ii = new Intent(context, ShowImageActivity.class);
                     ii.putExtra("id",notas.get(position).getId());
                     context.startActivity(ii);
                 }
                 else {
-                    Intent i = new Intent(context, DetallesActivity.class);
-                    modelostatisco = notas.get(position);
-                    context.startActivity(i);
+                    Intent i = new Intent(context, DetallesEditorialActivity.class);
+                    modelostatiscoedit = notas.get(position);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)context, holder.thumbnail, ViewCompat.getTransitionName(holder.thumbnail));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        context.startActivity(i, options.toBundle());
+                    }else{
+                        context.startActivity(i);
+                    }
+
+                    //context.startActivity(i);
                 }
             }
         });
 
-        holder.textlikes.setText(String.format("%d", notas.get(position).getLikes()));
+        /*holder.textlikes.setText(String.format("%d", notas.get(position).getLikes()));
         sesion = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getString("sesion","null");
 
         if(sesion.equals("1")) {
@@ -224,7 +275,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             }
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -262,16 +313,16 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
         public MyViewHolder(View view) {
             super(view);
-            this.title = (TextView) view.findViewById(R.id.textViewTitulo);
-            this.categoria = (TextView) view.findViewById(R.id.textViewCategoria);
-            this.autor = (TextView) view.findViewById(R.id.textViewAutor);
-            this.tiempo = (TextView) view.findViewById(R.id.textViewTime);
-            this.thumbnail = (ImageView) view.findViewById(R.id.imageView);
-            this.likeImage = (ImageView) view.findViewById(R.id.imageViewLike);
-            this.like = (LinearLayout) view.findViewById(R.id.likelayout);
-            this.comment = (LinearLayout) view.findViewById(R.id.commentlayout);
-            this.textlikes =  view.findViewById(R.id.textViewLikes);
-            this.textcomentarios = view.findViewById(R.id.textViewComentarios);
+            this.title = (TextView) view.findViewById(R.id.textViewTituloEdit);
+            this.categoria = (TextView) view.findViewById(R.id.textViewCategoriaEdit);
+            this.autor = (TextView) view.findViewById(R.id.textViewAutorEdit);
+            //this.tiempo = (TextView) view.findViewById(R.id.textViewTime);
+            this.thumbnail = (ImageView) view.findViewById(R.id.imageViewEdit);
+            //this.likeImage = (ImageView) view.findViewById(R.id.imageViewBlur);
+            //this.like = (LinearLayout) view.findViewById(R.id.likelayout);
+            //this.comment = (LinearLayout) view.findViewById(R.id.commentlayout);
+           // this.textlikes =  view.findViewById(R.id.textViewLikes);
+           // this.textcomentarios = view.findViewById(R.id.textViewComentarios);
             //view.setOnClickListener(this);
         }
 

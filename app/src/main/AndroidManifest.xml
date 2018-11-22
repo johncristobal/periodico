@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cimarronez.org.periodico">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -26,10 +26,6 @@
             android:name=".Noticias.DetallesActivity"
             android:label="@string/title_activity_detalles"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".BottomFragmentActivity"
-            android:label="@string/title_activity_principal"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".usuario.LoginActivity"
@@ -56,6 +52,10 @@
         <activity
             android:name=".settings.DatosActivity"
             android:label="@string/title_activity_datos"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Noticias.DetallesEditorialActivity"
+            android:label="@string/title_activity_detalles_editorial"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

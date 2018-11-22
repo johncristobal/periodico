@@ -3,8 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:layout_height="match_parent">
+    tools:context=".Noticias.DetallesEditorialActivity"
+    tools:showIn="@layout/activity_detalles_editorial">
 
     <ScrollView
         android:id="@+id/scrollView3"
@@ -29,39 +31,40 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/imageViewEditDetail"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:scaleType="fitStart"
+                android:transitionName="header"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="16dp" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textView5Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="20dp"
-                android:text="Nuevo correo americano del sur"
+                android:text="titutlo"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="157dp" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/textView6Subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="20dp"
-                android:text="Presentación de la aplicación electrónica NCAS, sistema de enlace y comunicación." />
+                android:text="subtitulo" />
 
             <TextView
-                android:id="@+id/textViewContent"
+                android:id="@+id/textViewContentDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp" />

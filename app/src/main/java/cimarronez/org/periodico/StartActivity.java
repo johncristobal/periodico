@@ -193,12 +193,12 @@ public class StartActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        if(flag) {
+        /*if(flag) {
             BlankFragment fragment = new BlankFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();
-        }
+        }*/
 
         final SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
 

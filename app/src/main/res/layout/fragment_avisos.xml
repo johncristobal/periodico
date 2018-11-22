@@ -16,6 +16,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            app:layout_scrollFlags="scroll|enterAlways"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
@@ -27,7 +28,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_editorial" />
+    <include layout="@layout/content_listaeditoriales" />
 
 </android.support.design.widget.CoordinatorLayout>
 

@@ -11,7 +11,9 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -123,13 +125,13 @@ public class DatosActivity extends AppCompatActivity {
     public void actualizaDatos(View view) {
         //actualizar user firebase, shaeredpreferences
 
-        progressBar33.setVisibility(View.VISIBLE);
-        buttonRegistro.setVisibility(View.GONE);
         if(!textViewNombre.getText().toString().equals("") && !textViewCorreo.getText().toString().equals("")){
+            enviarInfo enviarInfo = new enviarInfo();
+            enviarInfo.execute();
             //actualizao info
             //update user info
 
-            preferences.edit().putString("nombre",textViewNombre.getText().toString()).apply();
+            /*preferences.edit().putString("nombre",textViewNombre.getText().toString()).apply();
             preferences.edit().putString("correo",textViewCorreo.getText().toString()).apply();
 
             mAuth = FirebaseAuth.getInstance();
@@ -220,10 +222,10 @@ public class DatosActivity extends AppCompatActivity {
                         }
                     }
                 });
-            }
+            }*/
         }else{
-            progressBar33.setVisibility(View.GONE);
-            buttonRegistro.setVisibility(View.VISIBLE);
+            //progressBar33.setVisibility(View.GONE);
+            //buttonRegistro.setVisibility(View.VISIBLE);
             Toast.makeText(this,"Favor de llenar los campos...",Toast.LENGTH_SHORT).show();
         }
     }
@@ -476,4 +478,128 @@ public class DatosActivity extends AppCompatActivity {
             }
         }
     }
+
+//========================= Thread para enviar datos =================================================
+    public class enviarInfo extends AsyncTask<Void,Void,Void>{
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        progressBar33.setVisibility(View.VISIBLE);
+        buttonRegistro.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+
+        preferences.edit().putString("nombre",textViewNombre.getText().toString()).apply();
+        preferences.edit().putString("correo",textViewCorreo.getText().toString()).apply();
+
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+
+        if(flagFoto){
+            //update foto
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://cimarronez.appspot.com/");
+            final StorageReference ref = storageRef.child("usuarios/"+mAuth.getUid()+"/perfil.png");
+
+            //File image = new File(preferences.getString("nombrefoto", "null"));
+            //Uri uri = Uri.fromFile(image);
+            perfi.setDrawingCacheEnabled(true);
+            perfi.buildDrawingCache();
+
+            Bitmap bmp = null;
+            try {
+                bmp = ((BitmapDrawable) perfi.getDrawable()).getBitmap();
+                //bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+                byte[] data = baos.toByteArray();
+
+                StorageMetadata metadata = new StorageMetadata.Builder()
+                        .setContentType("image/png")
+                        .build();
+                UploadTask uploadTask = ref.putBytes(data,metadata);
+
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        progressBar33.setVisibility(View.GONE);
+                        buttonRegistro.setVisibility(View.VISIBLE);
+                        Toast.makeText(DatosActivity.this,"Tuvimos un problema al actualizar. Intent más tarde...",Toast.LENGTH_SHORT).show();
+
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        Uri downloadUri = taskSnapshot.getUploadSessionUri();
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(textViewNombre.getText().toString())
+                                .setPhotoUri(downloadUri)
+                                .build();
+
+                        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    //progressBar33.setVisibility(View.GONE);
+                                    //buttonRegistro.setVisibility(View.VISIBLE);
+                                    finish();
+                                }else {
+                                    progressBar33.setVisibility(View.GONE);
+                                    buttonRegistro.setVisibility(View.VISIBLE);
+                                    Toast.makeText(DatosActivity.this,"Tuvimos un problema al actualizar. Intent más tarde...",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressBar33.setVisibility(View.GONE);
+                buttonRegistro.setVisibility(View.VISIBLE);
+                Toast.makeText(DatosActivity.this,"Tuvimos un problema al actualizar. Intent más tarde...",Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            //no actualizamos foto, solo info
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(textViewNombre.getText().toString())
+                    //.setPhotoUri(downloadUri)
+                    .build();
+
+            user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        progressBar33.setVisibility(View.GONE);
+                        buttonRegistro.setVisibility(View.VISIBLE);
+                        finish();
+                    }else {
+                        progressBar33.setVisibility(View.GONE);
+                        buttonRegistro.setVisibility(View.VISIBLE);
+                        Toast.makeText(DatosActivity.this,"Tuvimos un problema al actualizar. Intent más tarde...",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+
+        //progressBar33.setVisibility(View.GONE);
+        //buttonRegistro.setVisibility(View.VISIBLE);
+    }
+
+    }
+
 }
