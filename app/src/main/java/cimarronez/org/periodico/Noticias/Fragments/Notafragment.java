@@ -179,7 +179,7 @@ public class Notafragment extends Fragment {
 
             Query temp = null;
             if(index == 0){
-                 temp = myRef.child("noticias");
+                 temp = myRef.child("noticias").orderByChild("estatus").equalTo(1);
             }else{
                  temp = myRef.child("noticias").orderByChild("categoria").equalTo(index);
             }

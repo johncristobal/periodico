@@ -98,26 +98,28 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                 .capture(holder.thumbnail)
                 .into(holder.thumbnail);*/
 
-        final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(modelo.getId()+"/foto0.jpg");
+        if(!notas.get(position).getImagen().equals("")) {
+            final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(modelo.getId() + "/foto0.jpg");
 
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                //ImageView imageView = holder.thumbnail;
-                // Got the download URL for 'users/me/profile.png'
-                Glide.with(context)
-                        .load(uri.toString())
-                        //.load(storageRef)
-                        .apply(new RequestOptions().override(100, 100).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
-                        .into(holder.thumbnail);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
+            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    //ImageView imageView = holder.thumbnail;
+                    // Got the download URL for 'users/me/profile.png'
+                    Glide.with(context)
+                            .load(uri.toString())
+                            //.load(storageRef)
+                            .apply(new RequestOptions().override(100, 100).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                            .into(holder.thumbnail);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
 
-            }
-        });
+                }
+            });
+        }
 
         //events each element
         holder.title.setOnClickListener(new View.OnClickListener() {
