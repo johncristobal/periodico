@@ -1,15 +1,20 @@
 package cimarronez.org.periodico;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -27,16 +32,31 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+
+import cimarronez.org.periodico.Noticias.DetallesActivity;
+
+import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
+
 public class ShowImageActivity extends AppCompatActivity {
 
     private ScaleGestureDetector mScaleGestureDetector;
     private float mScaleFactor = 1.0f;
     private WebView mImageView;
 
+    Uri ligaimagen = null;
+    File imagen;
+    Drawable picture;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbardetalles);
+        //toolbar.setTitle("");
+        //setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mImageView = findViewById(R.id.imageViewExpand);
         mImageView.getSettings().setBuiltInZoomControls(true);
@@ -71,6 +91,22 @@ public class ShowImageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 mImageView.loadDataWithBaseURL("file:///android_asset/","<img src='"+uri+"' style='width:100%' />", "text/html", "utf-8", null);
+
+                ligaimagen = uri;
+                //getTempFile(DetallesActivity.this,uri.toString());
+                Glide.with(ShowImageActivity.this)
+                        .load(uri.toString())
+                        .apply(new RequestOptions().override(240, 300).centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                        //.load(storageRef)
+                        .into(new SimpleTarget<Drawable>() {
+
+                            @Override
+                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                //saveImage(resource);
+                                //foto.setImageDrawable(resource);
+                                picture = resource;
+                            }
+                        });
 
             // Got the download URL for 'users/me/profile.png'
             /*Glide.with(ShowImageActivity.this)
@@ -119,5 +155,44 @@ public class ShowImageActivity extends AppCompatActivity {
             mImageView.setScaleY(mScaleFactor);
             return true;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        if (item.getItemId() == R.id.action_share) {
+            Intent shareIntent = new Intent();
+
+            Uri imageUri = null;
+            try {
+                Bitmap bitmap = ((BitmapDrawable)picture).getBitmap();
+                String bitmapPath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap,"title", null);
+
+                imageUri = Uri.parse(bitmapPath);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+            shareIntent.setType("*/*");
+            shareIntent.setAction(Intent.ACTION_SEND);
+            //shareIntent.putExtra(Intent.EXTRA_TEXT, modelostatisco.getDescripcion());
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(shareIntent, "send"));
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.share, menu);
+        return true;
     }
 }

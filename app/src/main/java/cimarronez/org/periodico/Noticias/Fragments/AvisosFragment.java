@@ -257,7 +257,7 @@ public class AvisosFragment extends Fragment {
 
             Query temp = null;
             if(index == 0){
-                temp = myRef.child("editoriales");
+                temp = myRef.child("editoriales").orderByChild("estatus").equalTo(1);;
             }else{
                 temp = myRef.child("editoriales");//.orderByChild("categoria").equalTo(index);
             }
