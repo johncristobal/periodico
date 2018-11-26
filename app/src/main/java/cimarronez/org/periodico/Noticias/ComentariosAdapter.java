@@ -1,6 +1,7 @@
 package cimarronez.org.periodico.Noticias;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -29,12 +30,15 @@ public class ComentariosAdapter extends RecyclerView.Adapter<ComentariosAdapter.
     public Context context;
     public ArrayList<ComentariosModel> notas;
     private FirebaseAuth mAuth;
+    final SharedPreferences preferences;// = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
 
     public ComentariosAdapter(Context c, ArrayList<ComentariosModel> notas){
         context = c;
         this.notas = notas;
         //this.listener = listener;
         mAuth = FirebaseAuth.getInstance();
+        preferences = c.getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+
 
     }
 
@@ -50,7 +54,8 @@ public class ComentariosAdapter extends RecyclerView.Adapter<ComentariosAdapter.
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 
-        holder.title.setText(notas.get(position).getComentario());
+        holder.autor.setText(notas.get(position).getComentario());
+        holder.title.setText(notas.get(position).getNombre()+":");
         holder.fecha.setText(notas.get(position).getFecha());
         final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("usuarios").child(notas.get(position).idUsuario+"/perfil.png");
 
@@ -62,7 +67,7 @@ public class ComentariosAdapter extends RecyclerView.Adapter<ComentariosAdapter.
                 Glide.with(context)
                         .load(uri.toString())
                         //.load(storageRef)
-                        .apply(new RequestOptions().override(100, 100).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                        .apply(new RequestOptions().override(300, 300).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
                         .into(holder.thumbnail);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -80,12 +85,13 @@ public class ComentariosAdapter extends RecyclerView.Adapter<ComentariosAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {//implements View.OnClickListener{
-        public TextView title, fecha;
+        public TextView title, fecha,autor;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
             super(view);
             this.title = (TextView) view.findViewById(R.id.textViewComentt);
+            this.autor = (TextView) view.findViewById(R.id.textViewAutor);
             this.fecha = (TextView) view.findViewById(R.id.textViewFecha);
             this.thumbnail = (ImageView) view.findViewById(R.id.imageView88);
             //view.setOnClickListener(this);

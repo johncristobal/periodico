@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_share"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_menu_share"
+        android:icon="@mipmap/ic_sharewhite"
         android:title="@string/action_settings"
         app:showAsAction="always" />
 </menu>

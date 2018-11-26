@@ -101,6 +101,20 @@ public class DetallesActivity extends AppCompatActivity {
                                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                                     //saveImage(resource);
                                     foto.setImageDrawable(resource);
+                                    //picture = resource;
+                                    //picture = resource;
+                                }
+                            });
+                    Glide.with(DetallesActivity.this)
+                            .load(uri.toString())
+                            //.apply(new RequestOptions().override(240, 300).centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                            //.load(storageRef)
+                            .into(new SimpleTarget<Drawable>() {
+
+                                @Override
+                                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                    //saveImage(resource);
+                                    //foto.setImageDrawable(resource);
                                     picture = resource;
                                 }
                             });

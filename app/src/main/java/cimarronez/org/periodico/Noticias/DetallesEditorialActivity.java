@@ -204,11 +204,11 @@ public class DetallesEditorialActivity extends AppCompatActivity {
     }
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.share, menu);
+        //getMenuInflater().inflate(R.menu.share, menu);
         return true;
-    }
+    }*/
 
 }

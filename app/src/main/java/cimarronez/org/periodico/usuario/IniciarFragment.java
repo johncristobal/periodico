@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +42,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -119,12 +122,38 @@ public class IniciarFragment extends Fragment {
         final EditText correo = view.findViewById(R.id.editCorreo);
         final EditText pass = view.findViewById(R.id.editPass);
         final Button iniciar = view.findViewById(R.id.buttonStart);
+        final TextView passrecover = view.findViewById(R.id.textView2);
+
+        passrecover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(correo.getText().toString().equals("")){
+                    correo.requestFocus();
+                    Toast.makeText(getActivity(),"Introduce un correo válido",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mAuth.sendPasswordResetEmail(correo.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getActivity(),"Correo enviado. Revisa tu bandeja.",Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getActivity(),"Error al enviar correo. Intente mas tarde.",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+            }
+        });
+
         iniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             if(correo.getText().toString().equals("")){
-                Toast.makeText(getActivity(),"Introduce correo válido",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Introduce un correo válido",Toast.LENGTH_SHORT).show();
                 return;
             }
             if(pass.getText().toString().equals("")){
@@ -226,12 +255,8 @@ public class IniciarFragment extends Fragment {
                             Toast.makeText(getActivity(), "Favor de revisar sus datos.",Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
-
-                        // ...
                     }
                 });
-
-
             }
         });
     }

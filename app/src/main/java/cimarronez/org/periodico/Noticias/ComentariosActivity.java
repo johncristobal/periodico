@@ -51,6 +51,7 @@ public class ComentariosActivity extends AppCompatActivity {
 
     public EditText comentario;
     private FirebaseAuth mAuth;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class ComentariosActivity extends AppCompatActivity {
 
         //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.showSoftInput(comentario, InputMethodManager.SHOW_IMPLICIT);
-        final SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+        preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
         if(preferences.getString("sesion", "null").equals("1")) {
 
             //textViewHeader.setText(String.format("Hola de nuevo %s", preferences.getString("nombre", "null")));
@@ -117,7 +118,7 @@ public class ComentariosActivity extends AppCompatActivity {
             SimpleDateFormat dmyFormat = new SimpleDateFormat("dd-MM-yyyy");
             String fecha = dmyFormat.format(myDate);
 
-            ComentariosModel article = new ComentariosModel(keyArticle, 1, mAuth.getUid(), comentario.getText().toString(), fecha);
+            ComentariosModel article = new ComentariosModel(keyArticle, 1, mAuth.getUid(), preferences.getString("nombre","null"), comentario.getText().toString(), fecha);
 
             Map<String, Object> postValuesArticle = article.toMap();
             myRef.child("comentarios").child(idNota).child(keyArticle).updateChildren(postValuesArticle);

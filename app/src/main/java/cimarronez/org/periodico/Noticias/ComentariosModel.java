@@ -11,6 +11,7 @@ public class ComentariosModel {
     public String id;
     public int estatus;
     public String idUsuario;
+    public String nombre;
     public String comentario;
     public String fecha;
 
@@ -18,9 +19,10 @@ public class ComentariosModel {
 
     }
 
-    public ComentariosModel(String id,int estatus, String idUsuario, String comentario, String fecha) {
+    public ComentariosModel(String id,int estatus, String idUsuario,String nombre, String comentario, String fecha) {
         this.id = id;
         this.estatus = estatus;
+        this.nombre = nombre;
         this.idUsuario = idUsuario;
         this.comentario = comentario;
         this.fecha = fecha;
@@ -66,11 +68,20 @@ public class ComentariosModel {
         this.fecha = fecha;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
         result.put("estatus", estatus);
         result.put("idUsuario", idUsuario);
+        result.put("nombre", nombre);
         result.put("comentario", comentario);
         result.put("fecha", fecha);
 

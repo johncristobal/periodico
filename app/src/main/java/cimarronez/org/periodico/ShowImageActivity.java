@@ -96,7 +96,7 @@ public class ShowImageActivity extends AppCompatActivity {
                 //getTempFile(DetallesActivity.this,uri.toString());
                 Glide.with(ShowImageActivity.this)
                         .load(uri.toString())
-                        .apply(new RequestOptions().override(240, 300).centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                        //.apply(new RequestOptions().override(240, 300).centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
                         //.load(storageRef)
                         .into(new SimpleTarget<Drawable>() {
 
@@ -107,6 +107,7 @@ public class ShowImageActivity extends AppCompatActivity {
                                 picture = resource;
                             }
                         });
+
 
             // Got the download URL for 'users/me/profile.png'
             /*Glide.with(ShowImageActivity.this)
