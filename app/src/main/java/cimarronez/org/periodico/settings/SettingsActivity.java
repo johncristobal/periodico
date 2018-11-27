@@ -102,6 +102,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    public void acercaDe(View view) {
+        Intent act = new Intent(this, AboutActivity.class);
+        startActivity(act);
+        overridePendingTransition( R.anim.slide_up, R.anim.slide_down );
+    }
+
     public void iniciarSesion(View view) {
         Intent act = new Intent(this, LoginActivity.class);
         startActivity(act);

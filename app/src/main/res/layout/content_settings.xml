@@ -47,6 +47,7 @@
         <TextView
             android:id="@+id/textViewNombre"
             android:layout_width="match_parent"
+            app:fontFamily="@font/comfortaa"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -56,6 +57,7 @@
         <TextView
             android:id="@+id/textViewCorreo"
             android:layout_width="match_parent"
+            app:fontFamily="@font/comfortaa"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="center" />
@@ -76,6 +78,7 @@
         <TextView
             android:id="@+id/misdatosText"
             android:layout_width="match_parent"
+            app:fontFamily="@font/comfortaa"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:padding="20dp"
@@ -85,13 +88,16 @@
         <TextView
             android:id="@+id/acercaTexto"
             android:layout_width="match_parent"
+            app:fontFamily="@font/comfortaa"
             android:layout_height="wrap_content"
             android:padding="20dp"
+            android:onClick="acercaDe"
             android:text="Acerca de..." />
 
         <TextView
             android:id="@+id/notificacionesText"
             android:layout_width="match_parent"
+            app:fontFamily="@font/comfortaa"
             android:visibility="gone"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -100,6 +106,7 @@
         <TextView
             android:id="@+id/usuarioClose"
             android:layout_width="match_parent"
+            app:fontFamily="@font/comfortaa"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:onClick="cerrarSesion"

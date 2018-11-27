@@ -106,6 +106,11 @@ public class RegistroFragment extends Fragment {
 
                 if(!pass1.getText().toString().equals(pass2.getText().toString())){
                     Snackbar.make(v,"Las contraseñas no coinciden...",Snackbar.LENGTH_SHORT).show();
+                }else if(nombre.getText().toString().equals("")) {
+                    Snackbar.make(v,"Coloca un nombre de usuario...",Snackbar.LENGTH_SHORT).show();
+
+                }else if(correo.getText().toString().equals("")) {
+                    Snackbar.make(v,"Coloca un correo electrónico válido...",Snackbar.LENGTH_SHORT).show();
                 }else{
                     bar.setVisibility(View.VISIBLE);
                     registro.setVisibility(View.GONE);

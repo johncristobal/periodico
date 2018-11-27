@@ -40,7 +40,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ShowImageActivity"
-            android:label=""/>
+            android:label="" />
         <activity
             android:name=".Noticias.ComentariosActivity"
             android:label="@string/title_activity_comentarios"
@@ -56,7 +56,15 @@
         <activity
             android:name=".Noticias.DetallesEditorialActivity"
             android:label="@string/title_activity_detalles_editorial"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".settings.AboutActivity"
+            android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

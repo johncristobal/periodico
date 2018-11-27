@@ -34,5 +34,6 @@
     <string name="galeria">Galería</string>
     <string name="sharedName">cimarronez</string>
     <string name="title_activity_detalles_editorial">DetallesEditorialActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
 
 </resources>

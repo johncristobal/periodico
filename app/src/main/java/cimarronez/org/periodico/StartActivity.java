@@ -108,8 +108,9 @@ public class StartActivity extends AppCompatActivity
 
     public void updateView(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null)
+        if (toolbar != null) {
             toolbar.setTitle(title);
+        }
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this, drawer, toolbar,

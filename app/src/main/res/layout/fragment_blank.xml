@@ -19,6 +19,7 @@
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:theme="@style/ToolbarTheme"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -32,6 +33,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
+                android:theme="@style/ToolbarTheme"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
                 android:layout_height="?attr/actionBarSize" />

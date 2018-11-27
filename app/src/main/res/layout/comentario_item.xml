@@ -26,6 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:fontFamily="@font/comfortaa"
             android:text="Publicar"
             android:textColor="@color/primary"
             android:layout_alignParentStart="true" />
@@ -33,6 +34,7 @@
         <TextView
             android:id="@+id/textViewAutor"
             android:layout_width="match_parent"
+            app:fontFamily="@font/comfortaa"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewComentt"
             android:text="TextView" />
@@ -41,6 +43,7 @@
             android:id="@+id/textViewFecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:fontFamily="@font/comfortaa"
             android:layout_alignParentBottom="true"
             android:text="TextView"
             android:textSize="10sp" />

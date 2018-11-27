@@ -9,6 +9,12 @@
         <item name="android:activatedBackgroundIndicator">@drawable/drawer_selected_item</item>
     </style>
 
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:textColorPrimary">@color/primary_light</item>
+        <item name="android:textColorSecondary">@color/primary_light</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

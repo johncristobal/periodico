@@ -24,6 +24,7 @@
 
     <TextView
         android:id="@+id/textViewHeader"
+        app:fontFamily="@font/comfortaa"
         android:padding="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,6 +33,7 @@
 
     <TextView
         android:id="@+id/textView"
+        app:fontFamily="@font/comfortaa"
         android:layout_width="wrap_content"
         android:padding="3dp"
         android:layout_height="wrap_content"

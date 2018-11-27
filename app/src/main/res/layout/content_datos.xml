@@ -57,6 +57,7 @@
                     android:id="@+id/editNombreDatos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:fontFamily="@font/comfortaa"
                     android:backgroundTint="@color/primary_light"
                     android:hint="Nombre"
                     android:textColor="@color/primary"
@@ -75,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/primary_light"
+                    app:fontFamily="@font/comfortaa"
                     android:hint="Correo"
                     android:textColor="@color/primary"
                     android:textColorHint="@color/primary_light" />
@@ -102,6 +104,7 @@
                     android:id="@+id/buttonRegistro"
                     android:background="@drawable/back_button"
                     android:text="Actualizar datos"
+                    app:fontFamily="@font/comfortaa"
                     android:onClick="actualizaDatos"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_width="match_parent"

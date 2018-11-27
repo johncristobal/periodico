@@ -27,6 +27,7 @@
             android:backgroundTint="@color/primary_light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:fontFamily="@font/comfortaa"
             android:hint="Nombre"
             android:textColor="@color/primary_light"
             android:textColorHint="@color/primary_light" />
@@ -52,6 +53,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primary_light"
             android:hint="Correo"
+            app:fontFamily="@font/comfortaa"
             android:textColor="@color/primary_light"
             android:textColorHint="@color/primary_light" />
     </android.support.design.widget.TextInputLayout>
@@ -78,6 +80,7 @@
             android:inputType="textPassword"
             android:backgroundTint="@color/primary_light"
             android:hint="Contraseña"
+            app:fontFamily="@font/comfortaa"
             android:textColor="@color/primary_light"
             android:textColorHint="@color/primary_light" />
     </android.support.design.widget.TextInputLayout>
@@ -103,6 +106,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primary_light"
             android:hint="Confirmar contraseña"
+            app:fontFamily="@font/comfortaa"
             android:inputType="textPassword"
             android:textColor="@color/primary_light"
             android:textColorHint="@color/primary_light" />
@@ -134,6 +138,7 @@
             android:id="@+id/buttonRegistro"
             android:background="@drawable/back_button"
             android:text="Ingresar"
+            app:fontFamily="@font/comfortaa"
             android:textColor="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
