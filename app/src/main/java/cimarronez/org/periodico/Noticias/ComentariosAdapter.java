@@ -65,16 +65,16 @@ public class ComentariosAdapter extends RecyclerView.Adapter<ComentariosAdapter.
                 //ImageView imageView = holder.thumbnail;
                 // Got the download URL for 'users/me/profile.png'
                 Glide.with(context)
-                        .load(uri.toString())
-                        //.load(storageRef)
-                        .apply(new RequestOptions().override(300, 300).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
-                        .into(holder.thumbnail);
+                    .load(uri.toString())
+                    //.load(storageRef)
+                    .apply(new RequestOptions().override(200, 200).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                    .into(holder.thumbnail);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle any errors
-
+                holder.thumbnail.setImageResource(R.drawable.backicon);
             }
         });
     }

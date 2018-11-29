@@ -11,11 +11,14 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="center"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_foreground" />
+        app:srcCompat="@mipmap/ic_launcher_foreground">
+
+    </WebView>
 
     <ImageView
         android:id="@+id/imageView7"
@@ -29,4 +32,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_delete" />
+
+    <ProgressBar
+        android:id="@+id/progressBarCargaImagen"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewExpand"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewExpand"
+        app:layout_constraintStart_toStartOf="@+id/imageViewExpand"
+        app:layout_constraintTop_toTopOf="@+id/imageViewExpand"
+        tools:visibility="invisible" />
 </android.support.constraint.ConstraintLayout>

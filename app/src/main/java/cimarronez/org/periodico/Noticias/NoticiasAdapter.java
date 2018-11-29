@@ -119,6 +119,8 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
                 }
             });
+        }else{
+            holder.thumbnail.setImageResource(R.mipmap.ic_launcher_round);
         }
 
         //events each element

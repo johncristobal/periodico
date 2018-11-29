@@ -6,11 +6,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +23,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -28,12 +32,22 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.util.Collections;
 
+import cimarronez.org.periodico.Noticias.ComentariosActivity;
+import cimarronez.org.periodico.Noticias.ComentariosAdapter;
+import cimarronez.org.periodico.Noticias.ComentariosModel;
 import cimarronez.org.periodico.Noticias.DetallesActivity;
 
 import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
@@ -46,7 +60,9 @@ public class ShowImageActivity extends AppCompatActivity {
 
     Uri ligaimagen = null;
     File imagen;
+    String id;
     Drawable picture;
+    public ProgressBar progressBarCargaImagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,77 +80,11 @@ public class ShowImageActivity extends AppCompatActivity {
 
         //mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        String id = getIntent().getStringExtra("id");
+        id = getIntent().getStringExtra("id");
+        progressBarCargaImagen = findViewById(R.id.progressBarCargaImagen);
 
-        final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(id+"/foto0.jpg");
-        //StorageReference forestRef = storageRef.child("images/forest.jpg");
-
-        storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-            @Override
-            public void onSuccess(StorageMetadata storageMetadata) {
-
-                //here, storageMetadata contains all details about your file stored on FirebaseStorage
-                Log.i("tag", "name of file: "+storageMetadata.getName());
-                Log.i("tag", "size of file in bytes: "+storageMetadata.getSizeBytes());
-                Log.i("tag", "width: "+storageMetadata.getCustomMetadata("width"));
-                Log.i("tag", "content type of file: "+storageMetadata.getContentType());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Uh-oh, an error occurred!
-                Log.i("tag", "Exception occur while gettig metadata: "+exception.toString());
-            }
-        });
-
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                mImageView.loadDataWithBaseURL("file:///android_asset/","<img src='"+uri+"' style='width:100%' />", "text/html", "utf-8", null);
-
-                ligaimagen = uri;
-                //getTempFile(DetallesActivity.this,uri.toString());
-                Glide.with(ShowImageActivity.this)
-                        .load(uri.toString())
-                        //.apply(new RequestOptions().override(240, 300).centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
-                        //.load(storageRef)
-                        .into(new SimpleTarget<Drawable>() {
-
-                            @Override
-                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                                //saveImage(resource);
-                                //foto.setImageDrawable(resource);
-                                picture = resource;
-                            }
-                        });
-
-
-            // Got the download URL for 'users/me/profile.png'
-            /*Glide.with(ShowImageActivity.this)
-                    .load(uri.toString())
-                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
-                    //.load(storageRef)
-                    .into(new SimpleTarget<Drawable>() {
-                        @Override
-                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-
-                            //if(resource.getIntrinsicWidth() > resource.getIntrinsicHeight()){
-                             //   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                           // }
-
-                            //mImageView.setImageDrawable(resource);
-                            Log.i("width",resource.getIntrinsicWidth()+"");
-                            Log.i("heigth",resource.getIntrinsicHeight()+"");
-                        }
-                    });*/
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-
-            }
-        });
+        firebaseListener lis = new firebaseListener();
+        lis.execute();
     }
 
     /*@Override
@@ -195,5 +145,148 @@ public class ShowImageActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.share, menu);
         return true;
+    }
+
+
+//=================================GEt data from firebase===========================================
+    public class firebaseListener extends AsyncTask<Void, Void, Void> {
+        String ErrorCode = "";
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        ProgressBar progress = null;
+
+        public firebaseListener(){
+            //mAuth = FirebaseAuth.getInstance();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            try {
+
+                progressBarCargaImagen.setVisibility(View.VISIBLE);
+
+                // Use the application default credentials
+                /*GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(credentials)
+                        .setDatabaseUrl("https://cimarronez.firebaseio.com")
+                        //.setProjectId("cimarronez")
+                        .build();
+                FirebaseApp.initializeApp(options);
+
+                db = FirestoreClient.getFirestore();*/
+                //borro local database
+                //borrarDB();
+
+                //get num elements into articulo
+
+                /*progress.setTitle("Actualizando");
+                progress.setMessage("Recuperando información...");
+                progress.setIndeterminate(true);
+                progress.setCancelable(false);
+                progress.show();*/
+
+                //progress = getActivity().findViewById(R.id.progressBar);
+                //progress.setVisibility(View.VISIBLE);
+                //Drawable progressDrawable = progress.getProgressDrawable().mutate();
+                //progressDrawable.setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+                //progress.setProgressDrawable(progressDrawable);
+                //progress.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                //progress.setIndeterminate(true);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(id+"/foto0.jpg");
+            //StorageReference forestRef = storageRef.child("images/forest.jpg");
+
+            storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+                @Override
+                public void onSuccess(StorageMetadata storageMetadata) {
+
+                    //here, storageMetadata contains all details about your file stored on FirebaseStorage
+                    Log.i("tag", "name of file: "+storageMetadata.getName());
+                    Log.i("tag", "size of file in bytes: "+storageMetadata.getSizeBytes());
+                    Log.i("tag", "width: "+storageMetadata.getCustomMetadata("width"));
+                    Log.i("tag", "content type of file: "+storageMetadata.getContentType());
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Uh-oh, an error occurred!
+                    Log.i("tag", "Exception occur while gettig metadata: "+exception.toString());
+                }
+            });
+
+            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    mImageView.loadDataWithBaseURL("file:///android_asset/","<img src='"+uri+"' style='width:100%' />", "text/html", "utf-8", null);
+
+                    ligaimagen = uri;
+                    //getTempFile(DetallesActivity.this,uri.toString());
+                    Glide.with(ShowImageActivity.this)
+                            .load(uri.toString())
+                            //.apply(new RequestOptions().override(240, 300).centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                            //.load(storageRef)
+                            .into(new SimpleTarget<Drawable>() {
+
+                                @Override
+                                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                    //saveImage(resource);
+                                    //foto.setImageDrawable(resource);
+                                    picture = resource;
+                                    progressBarCargaImagen.setVisibility(View.INVISIBLE);
+                                    mImageView.setVisibility(View.VISIBLE);
+                                }
+                            });
+
+
+                    // Got the download URL for 'users/me/profile.png'
+            /*Glide.with(ShowImageActivity.this)
+                    .load(uri.toString())
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                    //.load(storageRef)
+                    .into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+
+                            //if(resource.getIntrinsicWidth() > resource.getIntrinsicHeight()){
+                             //   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                           // }
+
+                            //mImageView.setImageDrawable(resource);
+                            Log.i("width",resource.getIntrinsicWidth()+"");
+                            Log.i("heigth",resource.getIntrinsicHeight()+"");
+                        }
+                    });*/
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    progressBarCargaImagen.setVisibility(View.INVISIBLE);
+                    mImageView.setVisibility(View.VISIBLE);
+                }
+            });
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+
+        }
+
     }
 }
