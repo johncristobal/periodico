@@ -38,7 +38,7 @@
                 android:layout_centerHorizontal="true"
                 android:fontFamily="@font/comfortaa"
                 android:text="TextView"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
 
         </RelativeLayout>
 

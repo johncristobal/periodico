@@ -29,17 +29,17 @@ public class MapasAdapter extends RecyclerView.Adapter<MapasAdapter.MyViewHolder
 
     public Context context;
     public int[] mapas;
+    public String[] textos;
     private FirebaseAuth mAuth;
     final SharedPreferences preferences;// = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
 
-    public MapasAdapter(Context c, int[] notas){
+    public MapasAdapter(Context c, int[] notas,String[] textos){
         context = c;
         this.mapas = notas;
+        this.textos = textos;
         //this.listener = listener;
         mAuth = FirebaseAuth.getInstance();
         preferences = c.getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
-
-
     }
 
     @NonNull
@@ -55,7 +55,7 @@ public class MapasAdapter extends RecyclerView.Adapter<MapasAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 
         //holder.autor.setText(notas.get(position).getComentario());
-        holder.title.setText("Mapa: "+position);
+        holder.title.setText(textos[position].split(",")[0]);
         //holder.fecha.setText(notas.get(position).getFecha());
         holder.thumbnail.setImageResource(mapas[position]);
 

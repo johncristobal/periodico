@@ -1,17 +1,25 @@
 package cimarronez.org.periodico.Noticias;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cimarronez.org.periodico.R;
+
+import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
 
 public class ShowMapDetail extends AppCompatActivity {
 
@@ -21,6 +29,7 @@ public class ShowMapDetail extends AppCompatActivity {
         setContentView(R.layout.activity_show_map_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
 
@@ -58,5 +67,16 @@ public class ShowMapDetail extends AppCompatActivity {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
