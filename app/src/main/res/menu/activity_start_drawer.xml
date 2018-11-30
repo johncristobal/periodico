@@ -19,6 +19,10 @@
             android:checkable="true"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Configuraciones" />
+        <item
+            android:id="@+id/navmaps"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="Mapas" />
 
     </group>
 

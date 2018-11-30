@@ -172,12 +172,18 @@ public class StartActivity extends AppCompatActivity
                     .replace(R.id.container, fragment)
                     .commit();
 
+        } else if (id == R.id.navmaps) {
+            fragment = new MapsFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+
         } else if (id == R.id.nav_slideshow) {
             //fragment = new BuscarFragment();
             Intent settings = new Intent(this, SettingsActivity.class);
             startActivity(settings);
 
-        }/* else if (id == R.id.nav_manage) {
+        } /* else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
