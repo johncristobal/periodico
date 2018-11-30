@@ -1,6 +1,7 @@
 package cimarronez.org.periodico.Noticias;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -57,6 +58,14 @@ public class MapasAdapter extends RecyclerView.Adapter<MapasAdapter.MyViewHolder
         holder.title.setText("Mapa: "+position);
         //holder.fecha.setText(notas.get(position).getFecha());
         holder.thumbnail.setImageResource(mapas[position]);
+
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context,ShowMapDetail.class);
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override
