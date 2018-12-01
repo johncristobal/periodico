@@ -52,7 +52,7 @@ public class MapasAdapter extends RecyclerView.Adapter<MapasAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
         //holder.autor.setText(notas.get(position).getComentario());
         holder.title.setText(textos[position].split(",")[0]);
@@ -63,6 +63,8 @@ public class MapasAdapter extends RecyclerView.Adapter<MapasAdapter.MyViewHolder
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context,ShowMapDetail.class);
+                i.putExtra("imagen",mapas[position]);
+                i.putExtra("texto",textos[position]);
                 context.startActivity(i);
             }
         });

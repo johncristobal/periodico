@@ -14,7 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cimarronez.org.periodico.R;
@@ -23,15 +25,18 @@ import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelosta
 
 public class ShowMapDetail extends AppCompatActivity {
 
+    public WebView imageView13;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
+        RelativeLayout llBottomSheet = findViewById(R.id.bottom_sheet);
 
         // init the bottom sheet behavior
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
@@ -40,6 +45,16 @@ public class ShowMapDetail extends AppCompatActivity {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        imageView13 = findViewById(R.id.imageView13);
+
+        Intent extras = getIntent();
+        int imagen = extras.getIntExtra("imagen",0);
+        String name = getResources().getResourceEntryName(imagen);
+
+        imageView13.loadDataWithBaseURL("file:///android_res/drawable/", "<img src='"+name+ "' />", "text/html", "utf-8", null);
+        imageView13.getSettings().setBuiltInZoomControls(true);
+        imageView13.setInitialScale(50);
+        imageView13.getSettings().setDisplayZoomControls(false);
 
         // set the peek height
         //bottomSheetBehavior.setPeekHeight(340);
