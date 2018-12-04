@@ -26,6 +26,7 @@ import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelosta
 public class ShowMapDetail extends AppCompatActivity {
 
     public WebView imageView13;
+    TextView textPueblo,textLengua,textPoblacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +47,17 @@ public class ShowMapDetail extends AppCompatActivity {
         //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         imageView13 = findViewById(R.id.imageView13);
+        textPueblo = findViewById(R.id.textPueblo);
+        textLengua = findViewById(R.id.textLengua);
+        textPoblacion = findViewById(R.id.textPoblacion);
 
         Intent extras = getIntent();
         int imagen = extras.getIntExtra("imagen",0);
         String name = getResources().getResourceEntryName(imagen);
+        String[] datos = extras.getStringExtra("texto").split(",");
+        textPueblo.setText(datos[0]);
+        textLengua.setText(datos[1]);
+        textPoblacion.setText(datos[2]);
 
         imageView13.loadDataWithBaseURL("file:///android_res/drawable/", "<img src='"+name+ "' />", "text/html", "utf-8", null);
         imageView13.getSettings().setBuiltInZoomControls(true);
