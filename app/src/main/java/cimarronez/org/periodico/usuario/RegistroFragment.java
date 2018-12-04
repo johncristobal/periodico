@@ -143,6 +143,7 @@ public class RegistroFragment extends Fragment {
                             //also, create user firabase...
                             SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
                             preferences.edit().putString("nombre",nombre).apply();
+                            preferences.edit().putString("sesion","1").apply();
                             preferences.edit().putString("correo",correo).apply();
                             preferences.edit().putString("pass",pass).apply();
 
@@ -157,8 +158,8 @@ public class RegistroFragment extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            bar.setVisibility(View.GONE);
-                                            registro.setVisibility(View.VISIBLE);
+                                            //bar.setVisibility(View.GONE);
+                                            //registro.setVisibility(View.VISIBLE);
                                             if (mListener != null) {
                                                 mListener.onFragmentInteraction(null);
                                             }

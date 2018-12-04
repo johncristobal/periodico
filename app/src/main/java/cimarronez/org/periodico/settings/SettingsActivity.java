@@ -41,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
     public CircleImageView imageView11;
     public static FirebaseAuth mAuth;
     public ProgressBar bar;
+    public String sesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        sesion = "";
+
         bar = findViewById(R.id.progressBar2);
         misdatos = findViewById(R.id.misdatosText);
         usuarioClose = findViewById(R.id.usuarioClose);
@@ -60,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
         imageView11 = findViewById(R.id.imageViewProfile);
 
         SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
-        String sesion = preferences.getString("sesion","null");
+        sesion = preferences.getString("sesion","null");
         if(sesion.equals("1")) {
             misdatos.setVisibility(View.VISIBLE);
             usuarioClose.setVisibility(View.VISIBLE);
@@ -91,14 +94,16 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void misDatos(View v){
-        Intent intent = new Intent(this, DatosActivity.class);
-        // Pass data object in the bundle and populate details activity.
-        //intent.putExtra(DetailsActivity.EXTRA_CONTACT, contact);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, imageView11, ViewCompat.getTransitionName(imageView11));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            startActivity(intent, options.toBundle());
-        }else{
-            startActivity(intent);
+        if(sesion.equals("1")) {
+            Intent intent = new Intent(this, DatosActivity.class);
+            // Pass data object in the bundle and populate details activity.
+            //intent.putExtra(DetailsActivity.EXTRA_CONTACT, contact);
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, imageView11, ViewCompat.getTransitionName(imageView11));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
         }
     }
 
@@ -126,7 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         FirebaseAuth.getInstance().signOut();
         mAuth = FirebaseAuth.getInstance();
-        mAuth.signInAnonymously()
+        mAuth.signInWithEmailAndPassword(getResources().getString(R.string.mailDefault),getResources().getString(R.string.passDefault))
             .addOnCompleteListener(SettingsActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -158,7 +163,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
 
         SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
-        String sesion = preferences.getString("sesion","null");
+        sesion = preferences.getString("sesion","null");
         if(sesion.equals("1")) {
             misdatos.setVisibility(View.VISIBLE);
             usuarioClose.setVisibility(View.VISIBLE);

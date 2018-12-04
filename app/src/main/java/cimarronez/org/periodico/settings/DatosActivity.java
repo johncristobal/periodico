@@ -37,6 +37,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -271,7 +273,8 @@ public class DatosActivity extends AppCompatActivity {
     private void galleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_PICK);
+        //intent.putExtra(MediaStore.EXTRA_OUTPUT, output);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
@@ -304,7 +307,7 @@ public class DatosActivity extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 //Uri photoURI = FileProvider.getUriForFile(VehiclePictures.this, "miituo.com.miituo", photoFile);
-                Uri photoURI = FileProvider.getUriForFile(this, "nowoscmexico.com.tradinggames_1.fileprovider", photoFile);
+                Uri photoURI = FileProvider.getUriForFile(this, "cimarronez.org.periodico.fileprovider", photoFile);
                 takepic.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takepic, REQUEST_CAMERA);
             }else{
@@ -394,20 +397,21 @@ public class DatosActivity extends AppCompatActivity {
                     flagFoto = true;
                     perfi.setImageBitmap(bitmap);
 
-                    File path = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"/perfil.png");
+                    File path = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator);
                     if(!path.exists()){
                         path.mkdirs();
                     }
 
+                    File pathImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"/perfil.jpg");
                     try {
-                        FileOutputStream out = new FileOutputStream(path);
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 80, out); // bmp is your Bitmap instance
+                        FileOutputStream out = new FileOutputStream(pathImage);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out); // bmp is your Bitmap instance
                         // PNG is a lossless format, the compression factor (100) is ignored
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    File image = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"/perfil.png");
+                    File image = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"/perfil.jpg");
                     mCurrentPhotoPath = image.getAbsolutePath();
 
                     //save name jajaja
@@ -421,7 +425,6 @@ public class DatosActivity extends AppCompatActivity {
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-
             }
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
@@ -436,12 +439,20 @@ public class DatosActivity extends AppCompatActivity {
 
         String filePath = mCurrentPhotoPath;//photoFile.getPath();
         //Bitmap bmp = BitmapFactory.decodeFile(filePath);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
-        Bitmap bmp = BitmapFactory.decodeFile(filePath,options);
+
+        //BitmapFactory.Options options = new BitmapFactory.Options();
+        //options.inSampleSize = 4;
+        //Bitmap bmp = BitmapFactory.decodeFile(filePath,options);
+
+        Glide.with(DatosActivity.this)
+                .load(filePath)
+                .apply(new RequestOptions().override(150, 200).centerCrop())//.override(150,200)
+                //.override(150,200)
+                //.centerCrop()
+                .into(perfi);
 
         flagFoto = true;
-        perfi.setImageBitmap(bmp);
+        //perfi.setImageBitmap(bmp);
     }
 
     public static class Utility {
@@ -516,7 +527,7 @@ public class DatosActivity extends AppCompatActivity {
                 bmp = ((BitmapDrawable) perfi.getDrawable()).getBitmap();
                 //bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+                bmp.compress(Bitmap.CompressFormat.PNG, 80, baos);
                 byte[] data = baos.toByteArray();
 
                 StorageMetadata metadata = new StorageMetadata.Builder()

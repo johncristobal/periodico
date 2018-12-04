@@ -172,8 +172,8 @@ public class IniciarFragment extends Fragment {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //Log.d(TAG, "signInWithEmail:success");
-                            bar.setVisibility(View.GONE);
-                            iniciar.setVisibility(View.VISIBLE);
+                            //bar.setVisibility(View.GONE);
+                            //iniciar.setVisibility(View.VISIBLE);
 
                             //recuperamps imagen y la guardams en local
                             FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -211,37 +211,11 @@ public class IniciarFragment extends Fragment {
                                 }
                             });
 
-                            /*islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                    // Local temp file has been created
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putString("nombrefoto",localFile.getAbsolutePath());
-                                    editor.apply();
-
-                                    //BitmapFactory.Options options = new BitmapFactory.Options();
-                                    //options.inSampleSize = 4;
-                                    //Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath(), options);
-
-                                    //imagen.setImageBitmap(bmp);
-                                    if (mListener != null) {
-                                        mListener.onFragmentInteraction(null);
-                                    }
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle any errors
-                                    if (mListener != null) {
-                                        mListener.onFragmentInteraction(null);
-                                    }
-                                }
-                            });*/
-
                             FirebaseUser user = mAuth.getCurrentUser();
                             SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
                             preferences.edit().putString("nombre",user.getDisplayName()).apply();
                             preferences.edit().putString("pass",pass.getText().toString()).apply();
+                            preferences.edit().putString("sesion","1").apply();
                             //Log.e("iamgen",user.getPhotoUrl().getPath());
                             preferences.edit().putString("correo",correo.getText().toString()).apply();
 
@@ -270,7 +244,7 @@ public class IniciarFragment extends Fragment {
                 path.mkdirs();
             }
 
-            final File localFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"perfil.png");
+            final File localFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+File.separator+"perfil.jpg");
             Bitmap bitmap = ((BitmapDrawable)resource).getBitmap();
             OutputStream os = new FileOutputStream(localFile);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);

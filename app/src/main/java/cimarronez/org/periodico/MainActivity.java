@@ -77,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
                             });
-                }else
-
+                }
+                else
                 {
                     mAuth = FirebaseAuth.getInstance();
-                    mAuth.signInAnonymously()
+                    mAuth.signInWithEmailAndPassword(getResources().getString(R.string.mailDefault),getResources().getString(R.string.passDefault))
                             .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {

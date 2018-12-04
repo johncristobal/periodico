@@ -172,6 +172,8 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             } else {
                 set = new HashSet<String>();
             }
+        }else{
+            set = new HashSet<String>();
         }
 
         holder.like.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +181,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             public void onClick(View view) {
                 //estyo es mas facil
                 //Toast.makeText(context,"Like "+position,Toast.LENGTH_SHORT).show();
-
+                sesion = context.getSharedPreferences("cimarronez",Context.MODE_PRIVATE).getString("sesion","null");
                 if(sesion.equals("1")){
 
                     int likes = notas.get(position).getLikes();

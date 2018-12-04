@@ -8,7 +8,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Configuraciones</string>
     <string name="mailDefault">cristobaljohn00@gmail.com</string>
-    <string name="passDefault">KIRAyagami99</string>
+    <string name="passDefault">KIRAyagami90</string>
     <string name="title_activity_detalles">DetallesActivity</string>
     <string name="text_favorites">Noticias</string>
 
@@ -35,7 +35,7 @@
     <string name="sharedName">cimarronez</string>
     <string name="title_activity_detalles_editorial">DetallesEditorialActivity</string>
     <string name="title_activity_about">AboutActivity</string>
-    <string name="bottom_sheet_peek">Ver más información</string>
+    <string name="bottom_sheet_peek">Ver detalles</string>
     <string name="bottom_sheet_content">Contenido</string>
     <string name="title_activity_show_map_detail">ShowMapDetail</string>
 

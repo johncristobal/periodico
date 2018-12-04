@@ -18,8 +18,13 @@
             android:title="Enlaces" />
         <item
             android:id="@+id/navmaps"
-            android:icon="@drawable/ic_home_black_24dp"
+            android:icon="@mipmap/ic_mapa"
             android:title="Mapas" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:checkable="true"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Configuraciones" />
     </group>
 
     <!--item android:title="Communicate">

@@ -214,8 +214,8 @@ public class StartActivity extends AppCompatActivity
             textViewHeader.setText(String.format("Hola de nuevo %s", preferences.getString("nombre", "null")));
 
             if (!preferences.getString("nombrefoto", "null").equals("null")) {
-                String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
-                //Bitmap bmp = BitmapFactory.decodeFile(filePath);
+                String filePath = preferences.getString("nombrefoto", "null");
+
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 4;
                 Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
