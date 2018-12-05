@@ -69,7 +69,7 @@ public class MapasAdapter extends RecyclerView.Adapter<MapasAdapter.MyViewHolder
                 Glide.with(context)
                         .load(uri.toString())
                         //.load(storageRef)
-                        .apply(new RequestOptions().override(100, 100).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                        .apply(new RequestOptions().override(150, 150).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
                         .into(holder.thumbnail);
             }
         }).addOnFailureListener(new OnFailureListener() {
