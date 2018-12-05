@@ -10,13 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,10 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import cimarronez.org.periodico.Noticias.EditorialAdapter;
+import cimarronez.org.periodico.Noticias.Adapters.EditorialAdapter;
 import cimarronez.org.periodico.Noticias.EditorialModel;
-import cimarronez.org.periodico.Noticias.NoticiasAdapter;
-import cimarronez.org.periodico.Noticias.NoticiasModel;
 import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.StartActivity;
 

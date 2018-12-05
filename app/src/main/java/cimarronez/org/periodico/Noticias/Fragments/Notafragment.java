@@ -1,7 +1,6 @@
 package cimarronez.org.periodico.Noticias.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,15 +24,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-import cimarronez.org.periodico.Noticias.DetallesActivity;
-import cimarronez.org.periodico.Noticias.NoticiasAdapter;
-import cimarronez.org.periodico.Noticias.NoticiasModel;
-import cimarronez.org.periodico.Noticias.RecyclerViewOnItemClickListener;
+import cimarronez.org.periodico.Noticias.Adapters.NoticiasAdapter;
+import cimarronez.org.periodico.Noticias.modelos.NoticiasModel;
 import cimarronez.org.periodico.R;
-import cimarronez.org.periodico.ShowImageActivity;
 
 public class Notafragment extends Fragment {
 

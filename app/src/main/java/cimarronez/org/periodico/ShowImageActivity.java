@@ -1,7 +1,6 @@
 package cimarronez.org.periodico;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,45 +11,26 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.util.Collections;
-
-import cimarronez.org.periodico.Noticias.ComentariosActivity;
-import cimarronez.org.periodico.Noticias.ComentariosAdapter;
-import cimarronez.org.periodico.Noticias.ComentariosModel;
-import cimarronez.org.periodico.Noticias.DetallesActivity;
-
-import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
 
 public class ShowImageActivity extends AppCompatActivity {
 
@@ -201,7 +181,6 @@ public class ShowImageActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
 
         @Override
         protected Void doInBackground(Void... voids) {
