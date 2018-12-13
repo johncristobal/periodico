@@ -34,7 +34,7 @@
                 android:id="@+id/imageViewEditDetail"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:scaleType="fitStart"
+                android:scaleType="centerCrop"
                 android:transitionName="header"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="16dp" />

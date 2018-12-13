@@ -84,7 +84,7 @@ public class DetallesEditorialActivity extends AppCompatActivity {
             foto.setVisibility(View.GONE);
         }else{
             //recuperas imagen y show
-            String filePath = Environment.getExternalStorageDirectory() + "/inpaint/"+"seconds"+".png";//photoFile.getPath();
+            String filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/inpaint/"+"seconds"+".png";//photoFile.getPath();
             //Bitmap bmp = BitmapFactory.decodeFile(filePath);
             //BitmapFactory.Options options = new BitmapFactory.Options();
             //options.inSampleSize = 4;
@@ -138,7 +138,7 @@ public class DetallesEditorialActivity extends AppCompatActivity {
                     }
             );*/
 
-            foto.setOnClickListener(new View.OnClickListener() {
+            /*foto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent ii = new Intent(DetallesEditorialActivity.this, ShowImageActivity.class);
@@ -146,7 +146,7 @@ public class DetallesEditorialActivity extends AppCompatActivity {
                     startActivity(ii);
                     //Toast.makeText(DetallesActivity.this,"Abrir imagen",Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
         }
     }
 

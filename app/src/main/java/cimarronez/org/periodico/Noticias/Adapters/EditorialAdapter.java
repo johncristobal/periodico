@@ -142,7 +142,7 @@ public class EditorialAdapter extends RecyclerView.Adapter<EditorialAdapter.MyVi
         });
 
         //events each element
-        holder.title.setOnClickListener(new View.OnClickListener() {
+        /*holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -157,7 +157,7 @@ public class EditorialAdapter extends RecyclerView.Adapter<EditorialAdapter.MyVi
                     context.startActivity(i);
                 }
             }
-        });
+        });*/
 
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,11 +166,11 @@ public class EditorialAdapter extends RecyclerView.Adapter<EditorialAdapter.MyVi
                 //Blurry.delete((ViewGroup)holder.thumbnail.getParent());
                 Bitmap bitmap = ((BitmapDrawable)holder.thumbnail.getDrawable()).getBitmap();
 
-                File f3=new File(Environment.getExternalStorageDirectory()+"/inpaint/");
+                File f3=new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/inpaint/");
                 if(!f3.exists())
                     f3.mkdirs();
                 OutputStream outStream = null;
-                File file = new File(Environment.getExternalStorageDirectory() + "/inpaint/"+"seconds"+".png");
+                File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/inpaint/"+"seconds"+".png");
                 if(file.exists())
                     file.delete();
 

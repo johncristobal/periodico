@@ -390,10 +390,10 @@ public class DatosActivity extends AppCompatActivity {
                     String picturePath = cursor.getString(columnIndex);
                     cursor.close();
 
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 4;
+                    //BitmapFactory.Options options = new BitmapFactory.Options();
+                    //options.inSampleSize = 4;
                     //Bitmap bmp = BitmapFactory.decodeFile(filePath,options);
-                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath,options);
+                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
                     flagFoto = true;
                     perfi.setImageBitmap(bitmap);
 

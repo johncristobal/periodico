@@ -84,9 +84,9 @@ public class StartActivity extends AppCompatActivity
             if (!preferences.getString("nombrefoto", "null").equals("null")) {
                 String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
                 //Bitmap bmp = BitmapFactory.decodeFile(filePath);
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 4;
-                Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
+                //BitmapFactory.Options options = new BitmapFactory.Options();
+                //options.inSampleSize = 4;
+                Bitmap bmp = BitmapFactory.decodeFile(filePath);
 
                 imagen.setImageBitmap(bmp);
             }

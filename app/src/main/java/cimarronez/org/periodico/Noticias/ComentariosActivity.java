@@ -86,8 +86,8 @@ public class ComentariosActivity extends AppCompatActivity {
                 String filePath = preferences.getString("nombrefoto", "null");//photoFile.getPath();
                 //Bitmap bmp = BitmapFactory.decodeFile(filePath);
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 4;
-                Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
+                //options.inSampleSize = 4;
+                Bitmap bmp = BitmapFactory.decodeFile(filePath);
 
                 imageView8.setImageBitmap(bmp);
             }else{

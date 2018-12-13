@@ -36,7 +36,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FileDownloadTask;
@@ -165,6 +167,8 @@ public class IniciarFragment extends Fragment {
             iniciar.setVisibility(View.GONE);
 
             //now, check if you can login
+            AuthCredential credential = EmailAuthProvider.getCredential(correo.getText().toString(), pass.getText().toString());
+            //mAuth.getCurrentUser().linkWithCredential(credential)
             mAuth.signInWithEmailAndPassword(correo.getText().toString(), pass.getText().toString())
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
