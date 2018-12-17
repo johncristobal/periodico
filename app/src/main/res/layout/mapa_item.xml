@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_margin="8dp"
-    android:background="#fff"
+    android:background="#fefefe"
     android:orientation="vertical"
     android:layout_height="wrap_content">
 
@@ -20,13 +20,13 @@
         card_view:cardCornerRadius="5dp">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imageViewMapa"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="110dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/backicon" />
 
@@ -38,7 +38,7 @@
                 android:layout_centerHorizontal="true"
                 android:fontFamily="@font/comfortaa"
                 android:text="TextView"
-                android:textSize="14dp" />
+                android:textSize="15sp" />
 
         </RelativeLayout>
 

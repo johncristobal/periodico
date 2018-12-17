@@ -60,8 +60,6 @@ public class MapsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
         //get categorias...
         firebaseListener sync = new firebaseListener();
         sync.execute();
