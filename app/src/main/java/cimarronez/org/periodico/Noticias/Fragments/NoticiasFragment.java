@@ -41,12 +41,12 @@ import cimarronez.org.periodico.StartActivity;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BlankFragment.OnFragmentInteractionListener} interface
+ * {@link NoticiasFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BlankFragment#newInstance} factory method to
+ * Use the {@link NoticiasFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BlankFragment extends Fragment {
+public class NoticiasFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -73,7 +73,7 @@ public class BlankFragment extends Fragment {
     public static NoticiasModel modelostatisco;
     public Context context;
 
-    public BlankFragment() {
+    public NoticiasFragment() {
         // Required empty public constructor
     }
 
@@ -83,11 +83,11 @@ public class BlankFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment.
+     * @return A new instance of fragment NoticiasFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment newInstance(String param1, String param2) {
-        BlankFragment fragment = new BlankFragment();
+    public static NoticiasFragment newInstance(String param1, String param2) {
+        NoticiasFragment fragment = new NoticiasFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -304,9 +304,9 @@ public class BlankFragment extends Fragment {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
-        ProgressDialog progress = new ProgressDialog(getActivity());
+        //ProgressDialog progress = new ProgressDialog(getActivity());
         //ProgressBar progress = null;
-
+        ProgressBar progress = null;
         public firebaseListener(){
             //mAuth = FirebaseAuth.getInstance();
         }
@@ -344,11 +344,18 @@ public class BlankFragment extends Fragment {
                 //progress.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
                 //progress.setIndeterminate(true);
 
-                progress.setTitle("Actualizando");
+                /*progress.setTitle("Actualizando");
                 progress.setMessage("Recuperando información...");
                 progress.setIndeterminate(true);
-                progress.setCancelable(false);
+                progress.setCancelable(false);*/
                 //progress.show();
+                progress = getActivity().findViewById(R.id.progressBar);
+                progress.setVisibility(View.VISIBLE);
+                //Drawable progressDrawable = progress.getProgressDrawable().mutate();
+                //progressDrawable.setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+                //progress.setProgressDrawable(progressDrawable);
+                //progress.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                progress.setIndeterminate(true);
 
             }catch(Exception e){
                 e.printStackTrace();
@@ -423,7 +430,8 @@ public class BlankFragment extends Fragment {
 
                     Collections.reverse(notas);
                     setupViewPager();
-                    progress.hide();
+                    //progress.hide();
+                    progress.setVisibility(View.GONE);
                 }
 
                 @Override

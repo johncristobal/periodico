@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:backgroundTint="@color/colorAccent"
         android:progressBackgroundTint="@color/colorAccent"
-        android:layout_height="15dp"
+        android:layout_height="25dp"
         android:layout_weight="1"/>
 
     <android.support.v7.widget.RecyclerView

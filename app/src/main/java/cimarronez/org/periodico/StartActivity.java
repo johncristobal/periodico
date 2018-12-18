@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import cimarronez.org.periodico.Noticias.Fragments.AvisosFragment;
-import cimarronez.org.periodico.Noticias.Fragments.BlankFragment;
+import cimarronez.org.periodico.Noticias.Fragments.NoticiasFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BuscarFragment;
 import cimarronez.org.periodico.Noticias.Fragments.MapsFragment;
 import cimarronez.org.periodico.settings.SettingsActivity;
@@ -28,7 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StartActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        BlankFragment.OnFragmentInteractionListener,
+        NoticiasFragment.OnFragmentInteractionListener,
         AvisosFragment.OnFragmentInteractionListener,
         BuscarFragment.OnFragmentInteractionListenerBuscar{
 
@@ -64,7 +64,7 @@ public class StartActivity extends AppCompatActivity
 
         Bundle bundle = new Bundle();
         bundle.putInt("indice", 0);
-        BlankFragment fragment = new BlankFragment();
+        NoticiasFragment fragment = new NoticiasFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, fragment)
                 .commit();
@@ -153,7 +153,7 @@ public class StartActivity extends AppCompatActivity
             // Handle the camera action
             Bundle bundle = new Bundle();
             bundle.putInt("indice", 0);
-            fragment = new BlankFragment();
+            fragment = new NoticiasFragment();
             fragment.setArguments(bundle);
 
             getSupportFragmentManager().beginTransaction()
@@ -195,7 +195,7 @@ public class StartActivity extends AppCompatActivity
         super.onResume();
 
         /*if(flag) {
-            BlankFragment fragment = new BlankFragment();
+            NoticiasFragment fragment = new NoticiasFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();

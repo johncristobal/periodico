@@ -35,7 +35,6 @@ import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.ShowImageActivity;
 import cimarronez.org.periodico.usuario.LoginActivity;
 
-import static cimarronez.org.periodico.Noticias.Fragments.BlankFragment.categorias;
 import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
 
 public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
