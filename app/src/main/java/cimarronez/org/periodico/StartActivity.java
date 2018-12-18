@@ -62,8 +62,11 @@ public class StartActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();*/
 
+        Bundle bundle = new Bundle();
+        bundle.putInt("indice", 0);
+        BlankFragment fragment = new BlankFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new BlankFragment())
+                .add(R.id.container, fragment)
                 .commit();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -148,7 +151,11 @@ public class StartActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            Bundle bundle = new Bundle();
+            bundle.putInt("indice", 0);
             fragment = new BlankFragment();
+            fragment.setArguments(bundle);
+
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();
@@ -214,7 +221,6 @@ public class StartActivity extends AppCompatActivity
         }else{
             textViewHeader.setText("NCAS");
             imagen.setImageResource(R.drawable.backicon);
-
         }
     }
 

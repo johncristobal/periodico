@@ -101,8 +101,6 @@ public class AvisosFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_avisos, container, false);
     }
 
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

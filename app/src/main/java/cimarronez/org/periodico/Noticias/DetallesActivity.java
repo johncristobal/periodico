@@ -74,7 +74,7 @@ public class DetallesActivity extends AppCompatActivity {
         final ImageView foto = findViewById(R.id.imageViewFoto);
 
         titulo.setText(modelostatisco.getTitulo());
-        categoria.setText(categorias.get(modelostatisco.getCategoria()));
+        //categoria.setText(categorias.get(modelostatisco.getCategoria()));
         fecha.setText(modelostatisco.getFecha());
         descripcion.setText(modelostatisco.getDescripcion());
 

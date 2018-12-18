@@ -12,19 +12,29 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import cimarronez.org.periodico.Noticias.Adapters.NoticiasAdapter;
+import cimarronez.org.periodico.Noticias.modelos.NoticiasModel;
 import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.StartActivity;
 
@@ -52,6 +62,16 @@ public class BlankFragment extends Fragment {
     public static List<String> categorias = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
+    public DatabaseReference mDatabase;
+    public DatabaseReference ref;
+    public ArrayList<NoticiasModel> notas;
+    public RecyclerView lista;
+    public NoticiasAdapter adapter;
+
+    public int index = 0;
+
+    public static NoticiasModel modelostatisco;
+    public Context context;
 
     public BlankFragment() {
         // Required empty public constructor
@@ -75,6 +95,27 @@ public class BlankFragment extends Fragment {
         return fragment;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Bundle arguments = getArguments();
+        updateView(0);
+
+        /*if (arguments != null)
+            updateView(getArguments().getInt("indice"));
+        else if (index != -1)
+            updateView(index);*/
+    }
+
+    private void updateView(int title) {
+
+        //this.textTab.setText(title);
+        firebaseListener firebase = new firebaseListener();
+        firebase.execute();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,10 +128,7 @@ public class BlankFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
-
         return view;
     }
 
@@ -98,14 +136,15 @@ public class BlankFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        lista = view.findViewById(R.id.listanoticias);
+        context = getActivity();
+        notas = new ArrayList<>();
+
+        /*viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         //setupViewPager(viewPager);
         // Set Tabs inside Toolbar
-        tabs = (TabLayout) view.findViewById(R.id.tab_layout);
-
+        tabs = (TabLayout) view.findViewById(R.id.tab_layout);*/
         //get categorias...
-        firebaseCategoriasListener sync = new firebaseCategoriasListener();
-        sync.execute();
     }
 
     @Override
@@ -118,6 +157,8 @@ public class BlankFragment extends Fragment {
 
     private void setupViewPager() {
         //ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
+
+        /*
         ViewPagerAdapterNoticias adapter = new ViewPagerAdapterNoticias(getChildFragmentManager());
         //for(int i=0;i<categorias.size();i++){
         for(int i=0;i<1;i++){
@@ -136,7 +177,34 @@ public class BlankFragment extends Fragment {
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabs.setVisibility(View.GONE);
 
-        StartActivity.flag = true;
+        StartActivity.flag = true;*/
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false);
+
+        lista.setLayoutManager(linearLayoutManager);
+        lista.setItemAnimator(new DefaultItemAnimator());
+
+        adapter = new NoticiasAdapter(context, notas);/*, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                //validar si tiene imagen solamente o si tiene tmb texto
+
+                if(notas.get(position).getDescripcion().equals("")){
+                    Intent ii = new Intent(context, ShowImageActivity.class);
+                    ii.putExtra("id",notas.get(position).getId());
+                    startActivity(ii);
+                }
+                else {
+                    Intent i = new Intent(context, DetallesActivity.class);
+                    modelostatisco = notas.get(position);
+                    startActivity(i);
+                }
+            }
+        });*/
+        lista.setAdapter(adapter);
+
     }
 
     @Override
@@ -156,23 +224,13 @@ public class BlankFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
 //=================================GEt data from firebase===========================================
-    public class firebaseCategoriasListener extends AsyncTask<Void, Void, Void> {
+    /*public class firebaseCategoriasListener extends AsyncTask<Void, Void, Void> {
         String ErrorCode = "";
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -197,7 +255,7 @@ public class BlankFragment extends Fragment {
                         .build();
                 FirebaseApp.initializeApp(options);
 
-                db = FirestoreClient.getFirestore();*/
+                db = FirestoreClient.getFirestore();
                 //borro local database
                 //borrarDB();
 
@@ -235,6 +293,184 @@ public class BlankFragment extends Fragment {
 
                 }
             });
+
+            return null;
+        }
+    }*/
+
+//=================================GEt data from firebase===========================================
+    public class firebaseListener extends AsyncTask<Void, Void, Void> {
+        String ErrorCode = "";
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        ProgressDialog progress = new ProgressDialog(getActivity());
+        //ProgressBar progress = null;
+
+        public firebaseListener(){
+            //mAuth = FirebaseAuth.getInstance();
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            try {
+                // Use the application default credentials
+                /*GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(credentials)
+                        .setDatabaseUrl("https://cimarronez.firebaseio.com")
+                        //.setProjectId("cimarronez")
+                        .build();
+                FirebaseApp.initializeApp(options);
+
+                db = FirestoreClient.getFirestore();*/
+                //borro local database
+                //borrarDB();
+
+                //get num elements into articulo
+
+                /*progress.setTitle("Actualizando");
+                progress.setMessage("Recuperando información...");
+                progress.setIndeterminate(true);
+                progress.setCancelable(false);
+                progress.show();*/
+
+                //progress = getActivity().findViewById(R.id.progressBar);
+                //progress.setVisibility(View.VISIBLE);
+                //Drawable progressDrawable = progress.getProgressDrawable().mutate();
+                //progressDrawable.setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+                //progress.setProgressDrawable(progressDrawable);
+                //progress.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                //progress.setIndeterminate(true);
+
+                progress.setTitle("Actualizando");
+                progress.setMessage("Recuperando información...");
+                progress.setIndeterminate(true);
+                progress.setCancelable(false);
+                //progress.show();
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            Query temp = null;
+            if(index == 0){
+                temp = myRef.child("noticias").orderByChild("estatus").equalTo(1);
+            }else{
+                temp = myRef.child("noticias").orderByChild("categoria").equalTo(index);
+            }
+
+            temp.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    /*NoticiasModel post = dataSnapshot.getValue(NoticiasModel.class);
+                    Log.i("Update","id_"+post.getAutor());
+
+                    for (int i=0;i<notas.size();i++){
+                        if(notas.get(i).getId().equals(post.getId())){
+                            notas.remove(i);
+                            notas.add(i,post);
+                            break;
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();*/
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    //update notas and update list
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            //this is for show items...
+            temp.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    notas.clear();
+                    for (DataSnapshot Snapshot : dataSnapshot.getChildren()) {
+                        try {
+                            NoticiasModel post = Snapshot.getValue(NoticiasModel.class);
+                            Log.e("TAG", post.autor);
+                            notas.add(post);
+
+                            //lista.scrollToPosition(notas.size() - 1);
+                            //adapter.notifyItemInserted(notas.size());
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    Collections.reverse(notas);
+                    setupViewPager();
+                    progress.hide();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            /*temp.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    if (dataSnapshot != null && dataSnapshot.getValue() != null) {
+                        try {
+                            NoticiasModel post = dataSnapshot.getValue(NoticiasModel.class);
+                            Log.e("TAG", post.autor);
+                            notas.add(post);
+
+                            //lista.scrollToPosition(notas.size() - 1);
+                            adapter.notifyItemInserted(notas.size() - 1);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });*/
 
             return null;
         }
