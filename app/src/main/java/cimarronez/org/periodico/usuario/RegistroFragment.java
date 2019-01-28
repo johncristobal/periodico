@@ -1,22 +1,29 @@
 package cimarronez.org.periodico.usuario;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -24,8 +31,17 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.Map;
+
+import cimarronez.org.periodico.Noticias.modelos.ClientModel;
 import cimarronez.org.periodico.R;
+import cimarronez.org.periodico.StartActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +57,7 @@ public class RegistroFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public String idtoken = "";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -97,6 +114,23 @@ public class RegistroFragment extends Fragment {
         final View viewFinal = view;
         registro  = view.findViewById(R.id.buttonRegistro);
         bar = view.findViewById(R.id.progressBar33);
+        ImageView info1 = view.findViewById(R.id.imageView15);
+        ImageView info2 = view.findViewById(R.id.imageView16);
+
+        info1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlert();
+            }
+        });
+        info2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlert();
+
+            }
+        });
+
 
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,14 +148,161 @@ public class RegistroFragment extends Fragment {
                 }else if(correo.getText().toString().equals("")) {
                     Snackbar.make(v,"Coloca un correo electrónico válido...",Snackbar.LENGTH_SHORT).show();
                 }else{
-                    bar.setVisibility(View.VISIBLE);
-                    registro.setVisibility(View.GONE);
                     //1. lregistras a autnetication y haces loguin
                     //si el registro queda, entonces si lanzas a firebase los datos
-                    registroFirebase(correo.getText().toString(),pass1.getText().toString(),nombre.getText().toString());
+
+                    firebaseListener listener = new firebaseListener();
+                    listener.execute(correo.getText().toString(),pass1.getText().toString(),nombre.getText().toString());
+                    //registroFirebase();
                 }
             }
         });
+    }
+
+    private void showAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Atención");
+        builder.setMessage("La contraseña debe contener mínimo 8 caracteres incluyendo al menos un dígito.");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog alerta = builder.create();
+        alerta.show();
+
+    }
+
+    //=================================GEt data from firebase===========================================
+    public class firebaseListener extends AsyncTask<String, Void, Void> {
+        String ErrorCode = "";
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        ProgressBar progress = null;
+
+        public firebaseListener(){
+            //mAuth = FirebaseAuth.getInstance();
+
+        }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        bar.setVisibility(View.GONE);
+        registro.setVisibility(View.VISIBLE);
+        Toast.makeText(getActivity(), "Fallo el registro. Intenta mas tarde...", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+        protected void onPreExecute() {
+
+            try {
+                bar.setVisibility(View.VISIBLE);
+                registro.setVisibility(View.GONE);
+
+                // Use the application default credentials
+                /*GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(credentials)
+                        .setDatabaseUrl("https://cimarronez.firebaseio.com")
+                        //.setProjectId("cimarronez")
+                        .build();
+                FirebaseApp.initializeApp(options);
+
+                db = FirestoreClient.getFirestore();*/
+                //borro local database
+                //borrarDB();
+
+                //get num elements into articulo
+
+                /*progress.setTitle("Actualizando");
+                progress.setMessage("Recuperando información...");
+                progress.setIndeterminate(true);
+                progress.setCancelable(false);
+                progress.show();*/
+
+                //progress = getActivity().findViewById(R.id.progressBar);
+                //progress.setVisibility(View.VISIBLE);
+                //Drawable progressDrawable = progress.getProgressDrawable().mutate();
+                //progressDrawable.setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+                //progress.setProgressDrawable(progressDrawable);
+                //progress.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                //progress.setIndeterminate(true);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
+        @Override
+        protected Void doInBackground(final String... voids) {
+
+            AuthCredential credential = EmailAuthProvider.getCredential(voids[0], voids[1]);
+            mAuth.getCurrentUser().linkWithCredential(credential)
+                    //mAuth.createUserWithEmailAndPassword(correo, pass)
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            //Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
+                            if (!task.isSuccessful()) {
+                                cancel(true);
+                            }else{
+                                //sucess on login, then update data correo and telefono,
+                                //also, create user firabase...
+                                SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+                                preferences.edit().putString("nombre",voids[2]).apply();
+                                preferences.edit().putString("sesion","1").apply();
+                                preferences.edit().putString("correo",voids[0]).apply();
+                                preferences.edit().putString("pass",voids[1]).apply();
+
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(voids[2])
+                                        //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                        .build();
+
+                                final FirebaseUser user = mAuth.getCurrentUser();
+                                user.updateProfile(profileUpdates)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    //bar.setVisibility(View.GONE);
+                                                    //registro.setVisibility(View.VISIBLE);
+
+                                                    if (mListener != null) {
+                                                        mListener.onFragmentInteraction(null);
+                                                    }
+                                                    //Log.d(TAG, "User profile updated.");
+                                                }else{
+                                                    cancel(true);
+                                                }
+                                            }
+                                        });
+                                //guardar datos de usuario en firebaswe???
+                                //2. lasnzas a firebase los datos del usuario
+                            }
+                        }
+                    });
+
+            //}
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            //Intent i = new Intent(getApplicationContext(), StartActivity.class);
+            //Intent i = new Intent(getApplicationContext(), ShareSMActivity.class);
+            //startActivity(i);
+        }
     }
 
     public void registroFirebase(final String correo, final String pass, final String nombre){
@@ -143,6 +324,14 @@ public class RegistroFragment extends Fragment {
                             registro.setVisibility(View.VISIBLE);
                             Toast.makeText(getActivity(), "Fallo el registro. Intenta mas tarde...", Toast.LENGTH_SHORT).show();
                         }else{
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                                @Override
+                                public void onSuccess(InstanceIdResult instanceIdResult) {
+                                    idtoken = instanceIdResult.getToken();
+                                    Log.e("newToken", idtoken);
+                                }
+                            });
+
                             //sucess on login, then update data correo and telefono,
                             //also, create user firabase...
                             SharedPreferences preferences = getActivity().getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
@@ -156,7 +345,7 @@ public class RegistroFragment extends Fragment {
                                 //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
                                 .build();
 
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            final FirebaseUser user = mAuth.getCurrentUser();
                             user.updateProfile(profileUpdates)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -164,6 +353,10 @@ public class RegistroFragment extends Fragment {
                                         if (task.isSuccessful()) {
                                             //bar.setVisibility(View.GONE);
                                             //registro.setVisibility(View.VISIBLE);
+
+
+                                            //}
+
                                             if (mListener != null) {
                                                 mListener.onFragmentInteraction(null);
                                             }

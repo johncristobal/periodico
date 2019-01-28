@@ -62,14 +62,14 @@
         android:id="@+id/textInputLayout3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="56dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:passwordToggleEnabled="true"
         android:textColorHint="@color/primary_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/imageView15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
@@ -77,26 +77,27 @@
             android:id="@+id/editPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
             android:backgroundTint="@color/primary_light"
             android:hint="Contraseña"
-            app:fontFamily="@font/comfortaa"
+            android:inputType="textPassword"
             android:textColor="@color/primary_light"
-            android:textColorHint="@color/primary_light" />
+            android:textColorHint="@color/primary_light"
+            app:fontFamily="@font/comfortaa" />
+
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="112dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:passwordToggleEnabled="true"
         android:textColorHint="@color/primary_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/imageView16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
@@ -106,10 +107,10 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primary_light"
             android:hint="Confirmar contraseña"
-            app:fontFamily="@font/comfortaa"
             android:inputType="textPassword"
             android:textColor="@color/primary_light"
-            android:textColorHint="@color/primary_light" />
+            android:textColorHint="@color/primary_light"
+            app:fontFamily="@font/comfortaa" />
     </android.support.design.widget.TextInputLayout>
 
     <RelativeLayout
@@ -136,12 +137,32 @@
 
         <Button
             android:id="@+id/buttonRegistro"
-            android:background="@drawable/back_button"
             android:text="Ingresar"
+            android:background="@drawable/back_button"
             app:fontFamily="@font/comfortaa"
             android:textColor="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_info_details"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout3"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout3" />
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@android:drawable/ic_menu_info_details"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout4" />
 
 </android.support.constraint.ConstraintLayout>

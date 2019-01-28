@@ -10,7 +10,6 @@ public class ClientModel {
 
     public String id;
     public int estatus;
-    public String idUsuario;
     public String nombre;
     public String token;
 
@@ -18,11 +17,10 @@ public class ClientModel {
 
     }
 
-    public ClientModel(String id, int estatus, String idUsuario, String nombre,String token) {
+    public ClientModel(String id, int estatus, String nombre,String token) {
         this.id = id;
         this.estatus = estatus;
         this.nombre = nombre;
-        this.idUsuario = idUsuario;
         this.token = token;
 
     }
@@ -41,14 +39,6 @@ public class ClientModel {
 
     public void setEstatus(int estatus) {
         this.estatus = estatus;
-    }
-
-    public String getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public String getToken() {
@@ -71,7 +61,6 @@ public class ClientModel {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
         result.put("estatus", estatus);
-        result.put("idUsuario", idUsuario);
         result.put("nombre", nombre);
         result.put("token", token);
 

@@ -29,9 +29,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -151,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
     {
         if(u != null){
 
+
             firebaseListener tokne = new firebaseListener();
             tokne.execute(u);
 
@@ -173,9 +177,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        protected void onCancelled() {
+            super.onCancelled();
+
+        }
+
+        @Override
         protected void onPreExecute() {
 
             try {
+
                 // Use the application default credentials
                 /*GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
                 FirebaseOptions options = new FirebaseOptions.Builder()
@@ -212,26 +223,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         @Override
-        protected Void doInBackground(FirebaseUser... voids) {
+        protected Void doInBackground(final FirebaseUser... voids) {
 
             Query temp = null;
-            temp = myRef.child("tokens").child(idtoken);//.orderByChild("categoria").equalTo(index);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference();
+            temp = myRef.child("tokens").child(voids[0].getUid());//.orderByChild("categoria").equalTo(index);
 
             String name = voids[0].getDisplayName();
 
-            //if(!comentario.getText().toString().equals("")) {
+            myRef.child("tokens").child(voids[0].getUid()).push();//.push().getKey();
 
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference();
+            ClientModel article = new ClientModel(mAuth.getUid(), 1, name,idtoken);
 
-                String keyArticle = myRef.child("tokens").child(mAuth.getUid()).push().getKey();
-
-                ClientModel article = new ClientModel(keyArticle, 1, mAuth.getUid(), name,idtoken);
-
-                Map<String, Object> postValuesArticle = article.toMap();
-                myRef.child("tokens").child(mAuth.getUid()).updateChildren(postValuesArticle);
-
-             //}
+            Map<String, Object> postValuesArticle = article.toMap();
+            myRef.child("tokens").child(voids[0].getUid()).updateChildren(postValuesArticle);
 
             return null;
         }
@@ -243,5 +249,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         }
     }
+
 
 }

@@ -23,6 +23,8 @@ import cimarronez.org.periodico.Noticias.Fragments.AvisosFragment;
 import cimarronez.org.periodico.Noticias.Fragments.NoticiasFragment;
 import cimarronez.org.periodico.Noticias.Fragments.BuscarFragment;
 import cimarronez.org.periodico.Noticias.Fragments.MapsFragment;
+import cimarronez.org.periodico.Noticias.Fragments.TalleresFragment;
+import cimarronez.org.periodico.settings.ContactActivity;
 import cimarronez.org.periodico.settings.SettingsActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -172,12 +174,22 @@ public class StartActivity extends AppCompatActivity
                     .replace(R.id.container, fragment)
                     .commit();
 
+        } else if (id == R.id.talleres) {
+            fragment = new TalleresFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+
         } else if (id == R.id.nav_slideshow) {
             //fragment = new BuscarFragment();
             Intent settings = new Intent(this, SettingsActivity.class);
             startActivity(settings);
 
-        } /* else if (id == R.id.nav_manage) {
+        } else if (id == R.id.contact) {
+            //fragment = new BuscarFragment();
+            Intent settings = new Intent(this, ContactActivity.class);
+            startActivity(settings);
+        }/* else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 

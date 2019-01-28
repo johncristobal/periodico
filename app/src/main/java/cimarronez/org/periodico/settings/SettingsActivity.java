@@ -114,8 +114,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void iniciarSesion(View view) {
-        Intent act = new Intent(this, LoginActivity.class);
-        startActivity(act);
+        SharedPreferences preferences = getSharedPreferences("cimarronez", Context.MODE_PRIVATE);
+        sesion = preferences.getString("sesion","null");
+        if(!sesion.equals("1")) {
+            Intent act = new Intent(this, LoginActivity.class);
+            startActivity(act);
+        }
     }
 
     public void cerrarSesion(View view) {
