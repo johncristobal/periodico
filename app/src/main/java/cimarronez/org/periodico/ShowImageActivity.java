@@ -40,7 +40,7 @@ public class ShowImageActivity extends AppCompatActivity {
 
     Uri ligaimagen = null;
     File imagen;
-    String id;
+    String id,name;
     Drawable picture;
     public ProgressBar progressBarCargaImagen;
 
@@ -61,6 +61,11 @@ public class ShowImageActivity extends AppCompatActivity {
         //mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
         id = getIntent().getStringExtra("id");
+        name = getIntent().getStringExtra("imagename");
+        if (name == null){
+            name = "foto0.jpg";
+        }
+        
         progressBarCargaImagen = findViewById(R.id.progressBarCargaImagen);
 
         firebaseListener lis = new firebaseListener();
@@ -185,7 +190,7 @@ public class ShowImageActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(id+"/foto0.jpg");
+            final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(id+"/"+name);
             //StorageReference forestRef = storageRef.child("images/forest.jpg");
 
             /*storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {

@@ -127,6 +127,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                     if (notas.get(position).getImagen().split(",").length == 1) {
                         Intent ii = new Intent(context, ShowImageActivity.class);
                         ii.putExtra("id", notas.get(position).getId());
+                        ii.putExtra("imagename", notas.get(position).getImagen().split(",")[0]);
                         context.startActivity(ii);
                     }else{
                         Intent ii = new Intent(context, GalleryActivity.class);
@@ -150,6 +151,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                 if(notas.get(position).getDescripcion().equals("")){
                     if (notas.get(position).getImagen().split(",").length == 1) {
                         Intent ii = new Intent(context, ShowImageActivity.class);
+                        ii.putExtra("imagename", notas.get(position).getImagen().split(",")[0]);
                         ii.putExtra("id", notas.get(position).getId());
                         context.startActivity(ii);
                     }else{

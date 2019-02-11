@@ -3,19 +3,26 @@ package cimarronez.org.periodico.Noticias.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +34,7 @@ import java.util.ArrayList;
 import cimarronez.org.periodico.Noticias.ShowMapDetail;
 import cimarronez.org.periodico.Noticias.modelos.MapasModel;
 import cimarronez.org.periodico.R;
+import cimarronez.org.periodico.ShowImageActivity;
 
 public class GaleriaAdapter extends RecyclerView.Adapter<GaleriaAdapter.MyViewHolder>{
 
@@ -68,11 +76,29 @@ public class GaleriaAdapter extends RecyclerView.Adapter<GaleriaAdapter.MyViewHo
             public void onSuccess(Uri uri) {
                 //ImageView imageView = holder.thumbnail;
                 // Got the download URL for 'users/me/profile.png'
-                Glide.with(context)
+                /*Glide.with(context)
                         .load(uri.toString())
                         //.load(storageRef)
-                        .apply(new RequestOptions().override(150, 150).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                        //.apply(new RequestOptions().override(150, 150).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
                         .into(holder.thumbnail);
+                */
+                Glide.with(context)
+                        .load(uri.toString())
+                        .apply(new RequestOptions().centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                        //.load(storageRef)
+                        .into(new SimpleTarget<Drawable>() {
+                            @Override
+                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+
+                                Bitmap bitmap = ((BitmapDrawable)resource).getBitmap();
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(bitmap.getWidth(), bitmap.getHeight());
+
+                                holder.thumbnail.setLayoutParams(params);
+                                holder.thumbnail.setImageDrawable(resource);
+                                //imageSelected = bitmap;
+                            }
+                        });
+                //holder.thumbnail.setMinimumHeight(150);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -85,6 +111,10 @@ public class GaleriaAdapter extends RecyclerView.Adapter<GaleriaAdapter.MyViewHo
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent ii = new Intent(context, ShowImageActivity.class);
+                ii.putExtra("imagename", imagenes[position]);
+                ii.putExtra("id", id);
+                context.startActivity(ii);
                 //Intent i = new Intent(context,ShowMapDetail.class);
                 //i.putExtra("imagen",mapas[position]);
                 /*i.putExtra("titulo",textos.get(position).getTitulo());

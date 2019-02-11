@@ -31,9 +31,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import cimarronez.org.periodico.R;
-import cimarronez.org.periodico.ShowImageActivity;
 
-import static cimarronez.org.periodico.Noticias.Fragments.Notafragment.modelostatisco;
 
 public class ShowMapDetail extends AppCompatActivity {
 

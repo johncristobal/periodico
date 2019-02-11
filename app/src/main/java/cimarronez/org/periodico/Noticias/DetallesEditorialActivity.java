@@ -37,8 +37,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 
 import cimarronez.org.periodico.R;
-import cimarronez.org.periodico.ShowImageActivity;
-import jp.wasabeef.blurry.Blurry;
 
 import static cimarronez.org.periodico.Noticias.Fragments.AvisosFragment.modelostatiscoedit;
 
