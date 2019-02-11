@@ -63,7 +63,6 @@ public class MapsFragment extends Fragment {
         //get categorias...
         firebaseListener sync = new firebaseListener();
         sync.execute();
-
     }
 
 

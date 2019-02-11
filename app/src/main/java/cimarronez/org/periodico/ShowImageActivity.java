@@ -188,7 +188,7 @@ public class ShowImageActivity extends AppCompatActivity {
             final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(id+"/foto0.jpg");
             //StorageReference forestRef = storageRef.child("images/forest.jpg");
 
-            storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+            /*storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
                 @Override
                 public void onSuccess(StorageMetadata storageMetadata) {
 
@@ -204,7 +204,7 @@ public class ShowImageActivity extends AppCompatActivity {
                     // Uh-oh, an error occurred!
                     Log.i("tag", "Exception occur while gettig metadata: "+exception.toString());
                 }
-            });
+            });*/
 
             storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override

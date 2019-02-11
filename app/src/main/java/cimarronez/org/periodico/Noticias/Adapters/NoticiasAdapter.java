@@ -30,6 +30,7 @@ import java.util.Set;
 
 import cimarronez.org.periodico.Noticias.ComentariosActivity;
 import cimarronez.org.periodico.Noticias.DetallesActivity;
+import cimarronez.org.periodico.Noticias.GalleryActivity;
 import cimarronez.org.periodico.Noticias.modelos.NoticiasModel;
 import cimarronez.org.periodico.R;
 import cimarronez.org.periodico.ShowImageActivity;
@@ -88,26 +89,31 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
                 .into(holder.thumbnail);*/
 
         if(!notas.get(position).getImagen().equals("")) {
-            final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(modelo.getId() + "/foto0.jpg");
+            //ahora, son mas imagenes, entonces....
+            String [] imagenes = notas.get(position).getImagen().split(",");
+            if(imagenes.length > 0) {
 
-            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    //ImageView imageView = holder.thumbnail;
-                    // Got the download URL for 'users/me/profile.png'
-                    Glide.with(context)
-                            .load(uri.toString())
-                            //.load(storageRef)
-                            .apply(new RequestOptions().override(100, 100).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
-                            .into(holder.thumbnail);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
+                final StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cimarronez.appspot.com").child("noticias").child(modelo.getId() + "/"+imagenes[0]);
 
-                }
-            });
+                storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        //ImageView imageView = holder.thumbnail;
+                        // Got the download URL for 'users/me/profile.png'
+                        Glide.with(context)
+                                .load(uri.toString())
+                                //.load(storageRef)
+                                .apply(new RequestOptions().override(100, 100).fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                                .into(holder.thumbnail);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                        holder.thumbnail.setImageResource(R.mipmap.ic_launcher_round);
+                    }
+                });
+            }
         }else{
             holder.thumbnail.setImageResource(R.mipmap.ic_launcher_round);
         }
@@ -118,11 +124,19 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             public void onClick(View view) {
 
                 if(notas.get(position).getDescripcion().equals("")){
-                    Intent ii = new Intent(context, ShowImageActivity.class);
-                    ii.putExtra("id",notas.get(position).getId());
-                    context.startActivity(ii);
+                    if (notas.get(position).getImagen().split(",").length == 1) {
+                        Intent ii = new Intent(context, ShowImageActivity.class);
+                        ii.putExtra("id", notas.get(position).getId());
+                        context.startActivity(ii);
+                    }else{
+                        Intent ii = new Intent(context, GalleryActivity.class);
+                        ii.putExtra("id", notas.get(position).getId());
+                        ii.putExtra("imagenes", notas.get(position).getImagen());
+                        context.startActivity(ii);
+                    }
                 }
                 else {
+                    //en detalles validar cantidad de imagenes par amostrar una o galeria...viewpager???
                     Intent i = new Intent(context, DetallesActivity.class);
                     modelostatisco = notas.get(position);
                     context.startActivity(i);
@@ -134,9 +148,16 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             @Override
             public void onClick(View view) {
                 if(notas.get(position).getDescripcion().equals("")){
-                    Intent ii = new Intent(context, ShowImageActivity.class);
-                    ii.putExtra("id",notas.get(position).getId());
-                    context.startActivity(ii);
+                    if (notas.get(position).getImagen().split(",").length == 1) {
+                        Intent ii = new Intent(context, ShowImageActivity.class);
+                        ii.putExtra("id", notas.get(position).getId());
+                        context.startActivity(ii);
+                    }else{
+                        Intent ii = new Intent(context, GalleryActivity.class);
+                        ii.putExtra("id", notas.get(position).getId());
+                        ii.putExtra("imagenes", notas.get(position).getImagen());
+                        context.startActivity(ii);
+                    }
                 }
                 else {
                     Intent i = new Intent(context, DetallesActivity.class);
