@@ -14,23 +14,30 @@
             android:checkable="true"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Editorial" />
-        <item
-            android:id="@+id/talleres"
-            android:icon="@mipmap/ic_taller"
-            android:title="Talleres" />
+
         <item
             android:id="@+id/navmaps"
             android:icon="@mipmap/ic_mapa"
             android:title="Mapas" />
         <item
-            android:id="@+id/contact"
-            android:icon="@mipmap/ic_contact"
-            android:title="Contacto" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:checkable="true"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Configuraciones" />
+            android:id="@+id/talleres"
+            android:icon="@mipmap/ic_taller"
+            android:title="Talleres" />
+
+        <item android:title="">
+            <menu>
+                <item
+                    android:id="@+id/contact"
+                    android:icon="@mipmap/ic_contact"
+                    android:title="Contacto" />
+                <item
+                    android:id="@+id/nav_slideshow"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_settings_black_24dp"
+                    android:title="Configuraciones" />
+            </menu>
+        </item>
+
     </group>
 
     <!--item android:title="Communicate">
