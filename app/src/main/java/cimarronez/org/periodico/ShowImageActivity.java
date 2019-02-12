@@ -52,7 +52,7 @@ public class ShowImageActivity extends AppCompatActivity {
         //toolbar.setTitle("");
         //setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mImageView = findViewById(R.id.imageViewExpand);
         mImageView.getSettings().setBuiltInZoomControls(true);
@@ -65,7 +65,7 @@ public class ShowImageActivity extends AppCompatActivity {
         if (name == null){
             name = "foto0.jpg";
         }
-        
+
         progressBarCargaImagen = findViewById(R.id.progressBarCargaImagen);
 
         firebaseListener lis = new firebaseListener();

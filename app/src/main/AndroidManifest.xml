@@ -41,6 +41,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ShowImageActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="" />
         <activity
             android:name=".Noticias.ComentariosActivity"
