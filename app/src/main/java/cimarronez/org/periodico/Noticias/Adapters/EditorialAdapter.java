@@ -11,17 +11,19 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -164,41 +166,44 @@ public class EditorialAdapter extends RecyclerView.Adapter<EditorialAdapter.MyVi
             public void onClick(View view) {
 
                 //Blurry.delete((ViewGroup)holder.thumbnail.getParent());
-                Bitmap bitmap = ((BitmapDrawable)holder.thumbnail.getDrawable()).getBitmap();
-
-                File f3=new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/inpaint/");
-                if(!f3.exists())
-                    f3.mkdirs();
-                OutputStream outStream = null;
-                File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/inpaint/"+"seconds"+".png");
-                if(file.exists())
-                    file.delete();
-
                 try {
-                    outStream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outStream);
-                    outStream.close();
-                    //Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    Bitmap bitmap = ((BitmapDrawable) holder.thumbnail.getDrawable()).getBitmap();
 
-                if(notas.get(position).getDescripcion().equals("")){
-                    Intent ii = new Intent(context, ShowImageActivity.class);
-                    ii.putExtra("id",notas.get(position).getId());
-                    context.startActivity(ii);
-                }
-                else {
-                    Intent i = new Intent(context, DetallesEditorialActivity.class);
-                    modelostatiscoedit = notas.get(position);
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)context, holder.thumbnail, ViewCompat.getTransitionName(holder.thumbnail));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        context.startActivity(i, options.toBundle());
-                    }else{
-                        context.startActivity(i);
+                    File f3 = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/inpaint/");
+                    if (!f3.exists())
+                        f3.mkdirs();
+                    OutputStream outStream = null;
+                    File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/inpaint/" + "seconds" + ".png");
+                    if (file.exists())
+                        file.delete();
+
+                    try {
+                        outStream = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outStream);
+                        outStream.close();
+                        //Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
-                    //context.startActivity(i);
+                    if (notas.get(position).getDescripcion().equals("")) {
+                        Intent ii = new Intent(context, ShowImageActivity.class);
+                        ii.putExtra("id", notas.get(position).getId());
+                        context.startActivity(ii);
+                    } else {
+                        Intent i = new Intent(context, DetallesEditorialActivity.class);
+                        modelostatiscoedit = notas.get(position);
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, holder.thumbnail, ViewCompat.getTransitionName(holder.thumbnail));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            context.startActivity(i, options.toBundle());
+                        } else {
+                            context.startActivity(i);
+                        }
+
+                        //context.startActivity(i);
+                    }
+                }catch (Exception e){
+                    Toast.makeText(context,"Tuvimos un problema, intenta mas tarde...",Toast.LENGTH_SHORT).show();
                 }
             }
         });

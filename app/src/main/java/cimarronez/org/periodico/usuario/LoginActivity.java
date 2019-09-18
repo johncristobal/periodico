@@ -2,9 +2,10 @@ package cimarronez.org.periodico.usuario;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import cimarronez.org.periodico.R;
 

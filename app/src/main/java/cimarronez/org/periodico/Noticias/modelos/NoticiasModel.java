@@ -1,6 +1,5 @@
 package cimarronez.org.periodico.Noticias.modelos;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.google.firebase.database.IgnoreExtraProperties;

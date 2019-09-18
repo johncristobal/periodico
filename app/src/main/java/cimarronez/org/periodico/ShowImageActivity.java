@@ -7,9 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,7 +14,12 @@ import android.view.MenuItem;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -29,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
+import com.jsibbold.zoomage.ZoomageView;
 
 import java.io.File;
 
@@ -36,7 +39,7 @@ public class ShowImageActivity extends AppCompatActivity {
 
     private ScaleGestureDetector mScaleGestureDetector;
     private float mScaleFactor = 1.0f;
-    private WebView mImageView;
+    private ZoomageView mImageView;
 
     Uri ligaimagen = null;
     File imagen;
@@ -55,8 +58,8 @@ public class ShowImageActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mImageView = findViewById(R.id.imageViewExpand);
-        mImageView.getSettings().setBuiltInZoomControls(true);
-        mImageView.getSettings().setDisplayZoomControls(false);
+        //mImageView.getSettings().setBuiltInZoomControls(true);
+        //mImageView.getSettings().setDisplayZoomControls(false);
 
         //mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
@@ -214,7 +217,7 @@ public class ShowImageActivity extends AppCompatActivity {
             storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    mImageView.loadDataWithBaseURL("file:///android_asset/","<img src='"+uri+"' style='width:100%' />", "text/html", "utf-8", null);
+                    //mImageView.loadDataWithBaseURL("file:///android_asset/","<img src='"+uri+"' style='width:100%' />", "text/html", "utf-8", null);
 
                     ligaimagen = uri;
                     //getTempFile(DetallesActivity.this,uri.toString());
@@ -228,6 +231,7 @@ public class ShowImageActivity extends AppCompatActivity {
                                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                                     //saveImage(resource);
                                     //foto.setImageDrawable(resource);
+                                    mImageView.setImageDrawable(resource);
                                     picture = resource;
                                     progressBarCargaImagen.setVisibility(View.INVISIBLE);
                                     mImageView.setVisibility(View.VISIBLE);

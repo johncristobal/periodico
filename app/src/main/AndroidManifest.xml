@@ -69,11 +69,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".Servicio.MyFirebaseInstanceIDService">
+        <!--service android:name=".Servicio.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-        </service>
+        </service-->
 
         <meta-data
             android:name="preloaded_fonts"
@@ -85,7 +85,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="cimarronez.org.periodico.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

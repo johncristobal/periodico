@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -44,7 +44,7 @@
                 tools:layout_editor_absoluteX="72dp"
                 tools:layout_editor_absoluteY="16dp" /-->
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutNombre"
                 android:layout_width="match_parent"
                 android:padding="10dp"
@@ -62,9 +62,9 @@
                     android:hint="Nombre"
                     android:textColor="@color/primary"
                     android:textColorHint="@color/primary_light" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutCorreo"
                 android:layout_width="match_parent"
                 android:padding="10dp"
@@ -80,7 +80,7 @@
                     android:hint="Correo"
                     android:textColor="@color/primary"
                     android:textColorHint="@color/primary_light" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RelativeLayout
                 android:id="@+id/RelativebuttonStartRegistro"
@@ -113,4 +113,4 @@
         </LinearLayout>
     </ScrollView>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

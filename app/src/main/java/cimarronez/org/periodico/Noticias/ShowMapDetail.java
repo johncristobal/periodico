@@ -7,14 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -22,13 +14,21 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.jsibbold.zoomage.ZoomageView;
 
 import cimarronez.org.periodico.R;
 
@@ -36,7 +36,7 @@ import cimarronez.org.periodico.R;
 public class ShowMapDetail extends AppCompatActivity {
 
     public boolean flag;
-    public WebView imageView13;
+    public ZoomageView imageView13;
     TextView textPueblo,textLengua,textPoblacion;
 
     @Override
@@ -80,10 +80,23 @@ public class ShowMapDetail extends AppCompatActivity {
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                imageView13.loadDataWithBaseURL("file:///android_asset/","<img src='"+uri+"' style='width:100%' />", "text/html", "utf-8", null);
-                imageView13.getSettings().setBuiltInZoomControls(true);
-                imageView13.setInitialScale(120);
-                imageView13.getSettings().setDisplayZoomControls(false);
+                Glide.with(ShowMapDetail.this)
+                        .load(uri.toString())
+                        //.apply(new RequestOptions().override(240, 300).centerInside().diskCacheStrategy(DiskCacheStrategy.ALL))//.override(150,200)
+                        //.load(storageRef)
+                        .into(new SimpleTarget<Drawable>() {
+
+                            @Override
+                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                //saveImage(resource);
+                                //foto.setImageDrawable(resource);
+                                imageView13.setImageDrawable(resource);
+                            }
+                        });
+                //imageView13.loadDataWithBaseURL("file:///android_asset/","<img src='"+uri+"' style='width:100%' />", "text/html", "utf-8", null);
+                //imageView13.getSettings().setBuiltInZoomControls(true);
+                //imageView13.setInitialScale(120);
+                //imageView13.getSettings().setDisplayZoomControls(false);
 
                 //ligaimagen = uri;
                 //getTempFile(DetallesActivity.this,uri.toString());

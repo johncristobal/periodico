@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 
 
 
@@ -12,15 +11,16 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
  * Created by miituo on 15/02/2017.
  */
 
-public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
+public class MyFirebaseInstanceIDService {
     final String Tag="NOTICIAS";
-    @Override
+
     public void onTokenRefresh() {
 
         String token = FirebaseInstanceId.getInstance().getToken();
         //Log.d(Tag,token);
         //sendRegistrationToServer(token);
     }
+
     private void sendRegistrationToServer(String Token) {
         //IinfoClient.getInfoClientObject().getClient().setToken(Token);
         //SharedPreferences app_preferences;
